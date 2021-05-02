@@ -1,0 +1,1 @@
+# PetCare: a platform for people and pets in need of help
