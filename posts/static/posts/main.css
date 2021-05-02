@@ -2,3 +2,10 @@
 .site-header .navbar {
     margin-bottom: 24px;
 }
+
+.list-group{
+    max-height: 50%;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
