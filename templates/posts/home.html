@@ -1,12 +1,22 @@
 {% extends "posts/base.html" %}
+{% load crispy_forms_filters %}
 {% block content %}
 
 <div class="container">
   <div class="row">
     <div class="col-sm">
+
+        <div class="media-body">
+            {% if user.is_authenticated  %}
+                <a href="{% url 'post-create' %}" type="button" class="btn btn-success btn-lg btn-block">Create new post</a>
+            {% else %}
+                <a href="{% url 'login' %}" type="button" class="btn btn-success btn-lg btn-block">Create new post</a>
+            {% endif %}
+        </div>
+
         {% for post in posts %}
             <article class="media content-section">
-                <div class="media-body">
+                <div class="media-body border p-4 my-1">
                     <div class="article-metadata">
                         <a class="mr-2" href="#">{{ post.author }}</a>
                         <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
