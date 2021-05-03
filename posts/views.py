@@ -49,7 +49,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     fields = ['title', 'content', 'tags']
 
     def form_valid(self, form):
-
         form.instance.author = self.request.user
         new_post = form.save(commit=False)
         new_post.slug = slugify(new_post.title)
