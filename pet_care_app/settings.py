@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os.path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
 
     'crispy_forms',
+    'taggit',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -125,11 +127,20 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Two lines bellow added to fix static media 404 error
+
+STATIC_ROOT = ''
+
+STATICFILES_DIRS = ( os.path.join('static'), )
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'posts-home'
+LOGIN_REDIRECT_URL = 'home'
 
 LOGIN_URL = 'login'
+
+
