@@ -48,7 +48,10 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'content', 'tags']
 
-    post_id = str(1 + Post.objects.latest('id').id)
+    try:
+        post_id = str(1 + Post.objects.latest('id').id)
+    except model.DoesNotExist:
+        post_id = '0'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
