@@ -2,14 +2,26 @@
 {% load crispy_forms_filters %}
 {% block content %}
 <div class="content-section">
+
     <form method="POST">
-        {% csrf_token %}    <!-- required security token -->
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Blog Post</legend>
-            {{ form|crispy }}
-        </fieldset>
-        <div class="form-group">
-            <button class="btn btn-outline-info" id="lowerButton" type="submit">Post</button>
+        {% csrf_token %}
+{#        <div class="form-group">#}
+{#            <label>Title</label>#}
+{#            <input type="text" class="form-control" name="title" placeholder="Add title">#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <label>Description</label>#}
+{#            <textarea type="text" class="form-control" name="description" placeholder="Add description"></textarea>#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <label>Tags</label>#}
+{#            <input type="text" data-role="tagsinput" class="form-control" name="tags">#}
+{#        </div>#}
+
+        {{ form|crispy }}
+
+        <div class="media-body p-2 my-1">
+            <button class="btn btn-outline-info" id="lowerButton" type="submit" value="OK">Post</button>
         </div>
     </form>
 </div>
