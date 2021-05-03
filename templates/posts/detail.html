@@ -1,7 +1,12 @@
-{% extends "posts/base.html"%}
+{% extends "posts/../base.html" %}
 {% block content %}
     <h1>EYYYYYYYYY</h1>
     <h1>EYYYYYYYYY</h1>
     <h1>EYYYYYYYYY</h1>
     <h1>EYYYYYYYYY</h1>
+
+    {% if post.author == user %}
+            <a class="btn btn-danger btn-lg" id="lowerButton" href="{% url 'post-delete' post.slug %}">Delete</a>
+    {% endif %}
+
 {% endblock content %}
