@@ -1,3 +1,5 @@
+from sqlite3 import OperationalError
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import slugify
@@ -7,6 +9,9 @@ from django.views.generic import CreateView, DeleteView, UpdateView
 from .forms import PostForm
 from .models import Post
 from taggit.models import Tag
+
+import string
+import random
 
 
 # Create your views here.
@@ -49,17 +54,15 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'content', 'tags']
 
-    try:
-        post_id = str(1 + Post.objects.latest('id').id)
-    except model.DoesNotExist:
-        post_id = '0'
-
     def form_valid(self, form):
         form.instance.author = self.request.user
         new_post = form.save(commit=False)
 
-        # in order to create unique slug, id number is added at the end of it
-        new_post.slug = slugify(''.join([new_post.title, self.post_id]))
+        # random string to add to the slug
+        letters = string.ascii_letters
+        random_string = ''.join(random.choice(letters) for i in range(16))
+
+        new_post.slug = slugify(''.join([new_post.title, random_string]))
 
         new_post.save()
         form.save_m2m()
