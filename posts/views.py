@@ -1,5 +1,6 @@
 from sqlite3 import OperationalError
 
+import taggit.models
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import slugify
@@ -87,6 +88,21 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['title', 'content', 'tags']
 
     # TODO: Pre-fill fields with post data
+
+    def get_context_data(self, **kwargs):
+        context = super(PostUpdateView, self).get_context_data(**kwargs)
+
+        slug = self.kwargs['slug']
+
+        post_data = Post.objects.filter(slug=slug)
+
+        title = post_data[0].title
+        content = post_data[0].content
+
+        tags = [str(tag) for tag in post_data[0].tags.all()]
+        tags = ','.join(tags)
+
+        return {'title': title, 'content': content, 'tags': tags}
 
     def form_valid(self, form):
         form.instance.author = self.request.user

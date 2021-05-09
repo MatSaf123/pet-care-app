@@ -15,7 +15,7 @@
 
         {% if post.author == user %}
                 <a class="btn btn-danger btn-lg" id="lowerButton" href="{% url 'post-delete' post.slug %}">Delete</a>
-                <a class="btn btn-secondary btn-lg" id="lowerButton" href="{% url 'post-update' post.slug %}">Update</a>
+                <a class="btn btn-secondary btn-lg" id="lowerButton" href="{% url 'post-update' post.slug %}">Edit</a>
         {% endif %}
     </div>
 {% endblock content %}
