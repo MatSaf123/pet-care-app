@@ -87,8 +87,6 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title', 'content', 'tags']
 
-    # TODO: Pre-fill fields with post data
-
     def get_context_data(self, **kwargs):
         """Get context with post data to fill form when editing
         """
