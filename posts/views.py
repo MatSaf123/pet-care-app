@@ -1,13 +1,9 @@
-from sqlite3 import OperationalError
-
-import taggit.models
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import slugify
 
 from django.views.generic import CreateView, DeleteView, UpdateView
 
-from .forms import PostForm
 from .models import Post
 from taggit.models import Tag
 
@@ -53,7 +49,7 @@ def tagged(request, slug):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content', 'tags']
+    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -85,13 +81,13 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content', 'tags']
+    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags']
 
     def get_context_data(self, **kwargs):
         """Get context with post data to fill form when editing
         """
 
-        context = super(PostUpdateView, self).get_context_data(**kwargs)
+        # context = super(PostUpdateView, self).get_context_data(**kwargs)
 
         slug = self.kwargs['slug']
 
@@ -99,11 +95,14 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         title = post_data[0].title
         content = post_data[0].content
+        country = post_data[0].country
+        city = post_data[0].city
+        street_address = post_data[0].street_address
 
         tags = [str(tag) for tag in post_data[0].tags.all()]
         tags = ','.join(tags)
 
-        return {'title': title, 'content': content, 'tags': tags}
+        return {'title': title, 'content': content, 'country': country, 'city': city, 'street_address': street_address, 'tags': tags}
 
     def form_valid(self, form):
         form.instance.author = self.request.user

@@ -18,6 +18,10 @@ class Post(models.Model):
     slug = models.SlugField(unique=True, max_length=100, default=None)
     tags = TaggableManager()
 
+    country = models.CharField(max_length=100, default=None)
+    city = models.CharField(max_length=100, default=None)
+    street_address = models.CharField(max_length=100, default=None)
+
     def __str__(self):
         return self.title
 
