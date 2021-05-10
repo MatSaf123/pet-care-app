@@ -90,6 +90,9 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     # TODO: Pre-fill fields with post data
 
     def get_context_data(self, **kwargs):
+        """Get context with post data to fill form when editing
+        """
+
         context = super(PostUpdateView, self).get_context_data(**kwargs)
 
         slug = self.kwargs['slug']
