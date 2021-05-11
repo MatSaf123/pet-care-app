@@ -2,6 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import slugify
 from django.views.generic import CreateView, DeleteView, UpdateView
+
+
 from .models import Post
 from taggit.models import Tag
 
@@ -10,8 +12,9 @@ import string
 import random
 
 # Geolocation
-from .geolocation import get_center_coordinates, get_geo, initiate_map
-
+from .geolocation import get_client_ip, get_geo, initiate_map
+import folium
+from geopy import Photon
 
 # Create your views here.
 
@@ -22,7 +25,8 @@ def home_view(request):
     # Show most common tags (top four)
     common_tags = Post.tags.most_common()[:4]
 
-    m = initiate_map(posts)
+    ip = get_client_ip(request)
+    m = initiate_map(posts, get_geo(ip))
 
     context = {
         'posts': posts,
@@ -34,8 +38,18 @@ def home_view(request):
 
 def detail_view(request, slug):
     post = get_object_or_404(Post, slug=slug)
+
+    geolocator = Photon(user_agent='measurements')
+    location = geolocator.geocode(' '.join([post.street_address, post.city, post.country]))
+
+    m = folium.Map(width=800, location=(location.latitude, location.longitude), zoom_start=16)
+    folium.Marker([location.latitude, location.longitude], icon=folium.Icon(color='red')).add_to(m)
+
+    m = m._repr_html_()
+
     context = {
         'post': post,
+        'map': m
     }
     return render(request, '../templates/posts/detail.html', context)
 
@@ -45,7 +59,9 @@ def tagged(request, slug):
 
     tag = get_object_or_404(Tag, slug=slug)
     posts = Post.objects.filter(tags=tag)
-    m = initiate_map(posts)
+
+    ip = get_client_ip(request)
+    m = initiate_map(posts, get_geo(ip))
 
     context = {
         'tag': tag,

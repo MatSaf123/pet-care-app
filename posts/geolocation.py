@@ -11,6 +11,13 @@ def get_geo(ip) -> tuple:
     :return: geometrical data
     """
 
+    #########################
+    # Practically just for testing purposes, because GeoLite2 doesn't contain 127.0.0.1 IP address
+    # TODO: remove when done testing
+    if ip == '127.0.0.1':
+        ip = '89.74.26.21'  # Katowice
+    #########################
+
     g = GeoIP2()
     country = g.country(ip)
     city = g.city(ip)
@@ -19,25 +26,22 @@ def get_geo(ip) -> tuple:
     return country, city, lat, lon
 
 
-def get_center_coordinates(lat_a, lon_a, lat_b=None, lon_b=None):
-    """Compute coordinates of center location between point A and point B
-    (If point B is not set yet, point A coordinates are returned).
-    :param lat_a: latitude of point A
-    :param lon_a: longitude of point A
-    :param lat_b: latitude of point B
-    :param lon_b: longitude of point B
-    :return:
-    """
+def get_client_ip(request):
+    """Get and return user IP address"""
 
-    cord = (lat_a, lon_a)
-    if lat_b and lon_b:
-        cord = [(lat_a + lat_b) / 2, (lon_a + lon_b) / 2]
-    return cord
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 
-def initiate_map(posts: django.db.models.QuerySet):
+def initiate_map(posts: django.db.models.QuerySet, location: tuple):
+    """Initiate and return map with Posts locations marked on it, rendered as a HTML map"""
+
     geolocator = Photon(user_agent='measurements')
-    m = folium.Map(width=800, height=500, zoom_start=8)
+    m = folium.Map(width=800, location=(location[2], location[3]), height=500, zoom_start=8)
 
     for post in posts:
         geo_data = ' '.join([post.street_address, post.city, post.country])
