@@ -27,6 +27,7 @@ def home_view(request):
 
     ip = get_client_ip(request)
     m = initiate_map(posts, get_geo(ip))
+    print(request)
 
     context = {
         'posts': posts,
@@ -42,7 +43,7 @@ def detail_view(request, slug):
     geolocator = Photon(user_agent='measurements')
     location = geolocator.geocode(' '.join([post.street_address, post.city, post.country]))
 
-    m = folium.Map(width=800, location=(location.latitude, location.longitude), zoom_start=16)
+    m = folium.Map(width=500, height=310, location=(location.latitude, location.longitude), zoom_start=16)
     folium.Marker([location.latitude, location.longitude], icon=folium.Icon(color='red')).add_to(m)
 
     m = m._repr_html_()

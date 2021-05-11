@@ -41,12 +41,12 @@ def initiate_map(posts: django.db.models.QuerySet, location: tuple):
     """Initiate and return map with Posts locations marked on it, rendered as a HTML map"""
 
     geolocator = Photon(user_agent='measurements')
-    m = folium.Map(width=800, location=(location[2], location[3]), height=500, zoom_start=8)
+    m = folium.Map(width=500, height=310, location=(location[2], location[3]), zoom_start=8)
 
     for post in posts:
         geo_data = ' '.join([post.street_address, post.city, post.country])
         location = geolocator.geocode(geo_data)
-        folium.Marker([location.latitude, location.longitude], tooltip='click here for more', popup=post.title,
+        folium.Marker([location.latitude, location.longitude], popup=post.title,
                       icon=folium.Icon(color='red')).add_to(m)
 
     m = m._repr_html_()
