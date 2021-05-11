@@ -143,4 +143,6 @@ LOGIN_REDIRECT_URL = 'home'
 
 LOGIN_URL = 'login'
 
+GEOIP_PATH = os.path.join(BASE_DIR, 'geoip')
+
 

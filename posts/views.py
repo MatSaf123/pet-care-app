@@ -1,14 +1,18 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import slugify
-
 from django.views.generic import CreateView, DeleteView, UpdateView
-
 from .models import Post
 from taggit.models import Tag
 
+# Utils
 import string
 import random
+
+# Geolocation
+from geopy import Photon
+import folium
+from .geolocation import get_center_coordinates, get_geo
 
 
 # Create your views here.
@@ -20,9 +24,22 @@ def home_view(request):
     # Show most common tags (top four)
     common_tags = Post.tags.most_common()[:4]
 
+    geolocator = Photon(user_agent='measurements')
+    m = folium.Map(width=800, height=500, zoom_start=8)
+
+    for post in posts:
+
+        geo_data = ' '.join([post.street_address, post.city, post.country])
+        location = geolocator.geocode(geo_data)
+        folium.Marker([location.latitude, location.longitude], tooltip='click here for more', popup=post.title,
+                      icon=folium.Icon(color='red')).add_to(m)
+
+    m = m._repr_html_()
+
     context = {
         'posts': posts,
         'common_tags': common_tags,
+        'map': m
     }
     return render(request, '../templates/posts/home.html', context)
 
@@ -102,7 +119,8 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         tags = [str(tag) for tag in post_data[0].tags.all()]
         tags = ','.join(tags)
 
-        return {'title': title, 'content': content, 'country': country, 'city': city, 'street_address': street_address, 'tags': tags}
+        return {'title': title, 'content': content, 'country': country, 'city': city, 'street_address': street_address,
+                'tags': tags}
 
     def form_valid(self, form):
         form.instance.author = self.request.user
