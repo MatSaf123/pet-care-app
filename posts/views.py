@@ -10,9 +10,7 @@ import string
 import random
 
 # Geolocation
-from geopy import Photon
-import folium
-from .geolocation import get_center_coordinates, get_geo
+from .geolocation import get_center_coordinates, get_geo, initiate_map
 
 
 # Create your views here.
@@ -24,17 +22,7 @@ def home_view(request):
     # Show most common tags (top four)
     common_tags = Post.tags.most_common()[:4]
 
-    geolocator = Photon(user_agent='measurements')
-    m = folium.Map(width=800, height=500, zoom_start=8)
-
-    for post in posts:
-
-        geo_data = ' '.join([post.street_address, post.city, post.country])
-        location = geolocator.geocode(geo_data)
-        folium.Marker([location.latitude, location.longitude], tooltip='click here for more', popup=post.title,
-                      icon=folium.Icon(color='red')).add_to(m)
-
-    m = m._repr_html_()
+    m = initiate_map(posts)
 
     context = {
         'posts': posts,
@@ -57,9 +45,12 @@ def tagged(request, slug):
 
     tag = get_object_or_404(Tag, slug=slug)
     posts = Post.objects.filter(tags=tag)
+    m = initiate_map(posts)
+
     context = {
         'tag': tag,
         'posts': posts,
+        'map': m
     }
     return render(request, '../templates/posts/home.html', context)
 

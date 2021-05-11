@@ -1,4 +1,7 @@
+import django.db.models
 from django.contrib.gis.geoip2 import GeoIP2
+from geopy import Photon
+import folium
 
 
 def get_geo(ip) -> tuple:
@@ -30,3 +33,18 @@ def get_center_coordinates(lat_a, lon_a, lat_b=None, lon_b=None):
     if lat_b and lon_b:
         cord = [(lat_a + lat_b) / 2, (lon_a + lon_b) / 2]
     return cord
+
+
+def initiate_map(posts: django.db.models.QuerySet):
+    geolocator = Photon(user_agent='measurements')
+    m = folium.Map(width=800, height=500, zoom_start=8)
+
+    for post in posts:
+        geo_data = ' '.join([post.street_address, post.city, post.country])
+        location = geolocator.geocode(geo_data)
+        folium.Marker([location.latitude, location.longitude], tooltip='click here for more', popup=post.title,
+                      icon=folium.Icon(color='red')).add_to(m)
+
+    m = m._repr_html_()
+
+    return m
