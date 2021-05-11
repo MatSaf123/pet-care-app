@@ -15,7 +15,7 @@
 
         <p class="media-body p-2 my-1">Common Tags:
             {% for mt in common_tags %}
-                <a href="#" class="badge badge-success">{{mt}}</a>
+                <a href="{% url 'tagged' mt %}" class="badge badge-success">{{mt}}</a>
             {% endfor %}
         </p>
 
