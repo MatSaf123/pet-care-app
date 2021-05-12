@@ -2,6 +2,9 @@ import django.db.models
 from django.contrib.gis.geoip2 import GeoIP2
 from geopy import Photon
 import folium
+from ediblepickle import checkpoint
+from django.template.defaultfilters import slugify
+import os
 
 
 def get_geo(ip) -> tuple:
@@ -37,15 +40,31 @@ def get_client_ip(request):
     return ip
 
 
+def key_namer(args, kwargs):
+    """Creates a key value for checkpoint by slugifying address query"""
+    return ''.join([slugify(args[0]), '.geo_cache'])
+
+
+@checkpoint(key=key_namer, work_dir='geo_cache/', refresh=False)
+def get_geo_data_from_api(geo_data: str):
+    # print('Making a call to remote API for:', geo_data)
+    geolocator = Photon(user_agent='measurements')
+    location = geolocator.geocode(geo_data)
+
+    return location
+
+
 def initiate_map(posts: django.db.models.QuerySet, location: tuple):
     """Initiate and return map with Posts locations marked on it, rendered as a HTML map"""
 
-    geolocator = Photon(user_agent='measurements')
     m = folium.Map(width=500, height=310, location=(location[2], location[3]), zoom_start=8)
+
+    if not os.path.exists('geo_cache/'):
+        os.mkdir('geo_cache/')
 
     for post in posts:
         geo_data = ' '.join([post.street_address, post.city, post.country])
-        location = geolocator.geocode(geo_data)
+        location = get_geo_data_from_api(geo_data)
         folium.Marker([location.latitude, location.longitude], popup=post.title,
                       icon=folium.Icon(color='red')).add_to(m)
 

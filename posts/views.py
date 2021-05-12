@@ -2,8 +2,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import slugify
 from django.views.generic import CreateView, DeleteView, UpdateView
-
-
 from .models import Post
 from taggit.models import Tag
 
@@ -12,9 +10,8 @@ import string
 import random
 
 # Geolocation
-from .geolocation import get_client_ip, get_geo, initiate_map
+from .geolocation import get_client_ip, get_geo, get_geo_data_from_api, initiate_map
 import folium
-from geopy import Photon
 
 # Create your views here.
 
@@ -27,7 +24,6 @@ def home_view(request):
 
     ip = get_client_ip(request)
     m = initiate_map(posts, get_geo(ip))
-    print(request)
 
     context = {
         'posts': posts,
@@ -40,8 +36,7 @@ def home_view(request):
 def detail_view(request, slug):
     post = get_object_or_404(Post, slug=slug)
 
-    geolocator = Photon(user_agent='measurements')
-    location = geolocator.geocode(' '.join([post.street_address, post.city, post.country]))
+    location = get_geo_data_from_api(' '.join([post.street_address, post.city, post.country]))
 
     m = folium.Map(width=500, height=310, location=(location.latitude, location.longitude), zoom_start=16)
     folium.Marker([location.latitude, location.longitude], icon=folium.Icon(color='red')).add_to(m)

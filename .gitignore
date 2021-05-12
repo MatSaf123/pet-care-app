@@ -166,3 +166,6 @@ Thumbs.db
 
 *.mmdb
 
+# Geolocation/Addresses cache
+
+*.geo_cache
