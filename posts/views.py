@@ -1,15 +1,17 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import slugify
-
 from django.views.generic import CreateView, DeleteView, UpdateView
-
 from .models import Post
 from taggit.models import Tag
 
+# Utils
 import string
 import random
 
+# Geolocation
+from .geolocation import get_client_ip, get_geo, get_geo_data_from_api, initiate_map
+import folium
 
 # Create your views here.
 
@@ -20,17 +22,30 @@ def home_view(request):
     # Show most common tags (top four)
     common_tags = Post.tags.most_common()[:4]
 
+    ip = get_client_ip(request)
+    m = initiate_map(posts, get_geo(ip))
+
     context = {
         'posts': posts,
         'common_tags': common_tags,
+        'map': m
     }
     return render(request, '../templates/posts/home.html', context)
 
 
 def detail_view(request, slug):
     post = get_object_or_404(Post, slug=slug)
+
+    location = get_geo_data_from_api(' '.join([post.street_address, post.city, post.country]))
+
+    m = folium.Map(width=500, height=310, location=(location.latitude, location.longitude), zoom_start=16)
+    folium.Marker([location.latitude, location.longitude], icon=folium.Icon(color='red')).add_to(m)
+
+    m = m._repr_html_()
+
     context = {
         'post': post,
+        'map': m
     }
     return render(request, '../templates/posts/detail.html', context)
 
@@ -40,9 +55,14 @@ def tagged(request, slug):
 
     tag = get_object_or_404(Tag, slug=slug)
     posts = Post.objects.filter(tags=tag)
+
+    ip = get_client_ip(request)
+    m = initiate_map(posts, get_geo(ip))
+
     context = {
         'tag': tag,
         'posts': posts,
+        'map': m
     }
     return render(request, '../templates/posts/home.html', context)
 
@@ -102,7 +122,8 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         tags = [str(tag) for tag in post_data[0].tags.all()]
         tags = ','.join(tags)
 
-        return {'title': title, 'content': content, 'country': country, 'city': city, 'street_address': street_address, 'tags': tags}
+        return {'title': title, 'content': content, 'country': country, 'city': city, 'street_address': street_address,
+                'tags': tags}
 
     def form_valid(self, form):
         form.instance.author = self.request.user
