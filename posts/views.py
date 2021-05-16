@@ -10,7 +10,7 @@ import string
 import random
 
 # Geolocation
-from .geolocation import get_client_ip, get_geo, get_geo_data_from_api, initiate_map
+from .geolocation import get_client_ip, get_geo_from_ip, get_geo_data_from_api, initiate_map
 import folium
 
 # Create your views here.
@@ -23,7 +23,7 @@ def home_view(request):
     common_tags = Post.tags.most_common()[:4]
 
     ip = get_client_ip(request)
-    m = initiate_map(posts, get_geo(ip))
+    m = initiate_map(posts, get_geo_from_ip(ip))
 
     context = {
         'posts': posts,
@@ -57,7 +57,7 @@ def tagged(request, slug):
     posts = Post.objects.filter(tags=tag)
 
     ip = get_client_ip(request)
-    m = initiate_map(posts, get_geo(ip))
+    m = initiate_map(posts, get_geo_from_ip(ip))
 
     context = {
         'tag': tag,

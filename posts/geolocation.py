@@ -7,7 +7,7 @@ from django.template.defaultfilters import slugify
 import os
 
 
-def get_geo(ip) -> tuple:
+def get_geo_from_ip(ip) -> tuple:
     """Get geometrical info from an IP address based on GeoLite2 databases.
     :param ip: user IP address
     :type ip: str
