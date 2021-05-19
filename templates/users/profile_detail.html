@@ -1,0 +1,16 @@
+{% extends "base.html"%}
+{% block content %}
+<div class="content-section">
+    <div class="media">
+        <img class="rounded-circle account-img" src="{{ profile_owner.profile.profile_pic.url }}">
+        <div class="media-body">
+            <h2 class="account-heading">{{profile_owner.username}}</h2>
+            <p class="text">Email address: {{ profile_owner.email }}</p>
+            <p class="text">Phone number: {{ profile_owner.number }}</p>
+            {% if profile_owner == user %}
+                <a class="btn btn-secondary" id="lowerButton" href="{% url 'profile-edit'%}">Edit</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -169,3 +169,7 @@ Thumbs.db
 # Geolocation/Addresses cache
 
 *.geo_cache
+
+# Profile pics
+
+media/profile_pictures

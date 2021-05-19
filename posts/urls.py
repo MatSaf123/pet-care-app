@@ -13,3 +13,5 @@ urlpatterns = [
     path('post/<slug:slug>/', detail_view, name="post-detail"),
     path('tag/<slug:slug>/', tagged, name="tagged"),
 ]
+
+

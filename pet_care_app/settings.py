@@ -121,15 +121,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Two lines bellow added to fix static media 404 error
-
 STATIC_ROOT = ''
 
 STATICFILES_DIRS = (os.path.join('static'),)
 
-# Media
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 MEDIA_URL = ''
 
 # Default primary key field type
@@ -137,8 +134,8 @@ MEDIA_URL = ''
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'home'
-
 LOGIN_URL = 'login'
+
+LOGIN_REDIRECT_URL = 'home'
 
 GEOIP_PATH = os.path.join(BASE_DIR, 'geoip')
