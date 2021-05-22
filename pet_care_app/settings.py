@@ -35,6 +35,7 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'taggit',
+    'phonenumber_field',
 
     'django.contrib.admin',
     'django.contrib.auth',

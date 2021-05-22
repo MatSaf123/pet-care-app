@@ -6,12 +6,18 @@ from PIL import Image
 
 
 # Create your models here.
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 class Profile(models.Model):
-    """User custom profile model"""
+    """Profile model"""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.ImageField(default='default.png', upload_to='profile_pictures')
+    phone_number = PhoneNumberField(default='', null=True, blank=True)
+    country = models.CharField(default='', max_length=64, null=True, blank=True)
+    city = models.CharField(default='', max_length=64, null=True, blank=True)
+    description = models.TextField(default='', max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'

@@ -5,8 +5,22 @@
         <img class="rounded-circle account-img" src="{{ profile_owner.profile.profile_pic.url }}">
         <div class="media-body">
             <h2 class="account-heading">{{profile_owner.username}}</h2>
-            <p class="text">Email address: {{ profile_owner.email }}</p>
-            <p class="text">Phone number: {{ profile_owner.number }}</p>
+
+            <div class="mt-3">
+                {% if user.is_authenticated  %}
+                <h5>Contact info:</h5>
+                <p class="text">Email address: {{ profile_owner.email }}</p>
+                <p class="text">Phone number: {{ profile_owner.profile.phone_number }}</p>
+                {% else %}
+                <a href="{% url 'login' %}" type="button" class="btn btn-outline-success">Log in to see contact info</a>
+                {% endif %}
+            </div>
+
+            <div class="mt-3">
+                <p class="text">From: {{ profile_owner.profile.city }} {{ profile_owner.profile.country }}</p>
+                <p class="text">About me: {{ profile_owner.profile.description }}</p>
+            </div>
+
             {% if profile_owner == user %}
                 <a class="btn btn-secondary" id="lowerButton" href="{% url 'profile-edit'%}">Edit</a>
             {% endif %}
