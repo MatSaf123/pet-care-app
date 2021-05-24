@@ -1,0 +1,13 @@
+########################################
+
+This is the location for GeoLite2 databases, which you can
+obtain at https://dev.maxmind.com/geoip/geoip2/geolite2/.
+
+Download files:
+
+    GeoLite2-City.mmdb
+    GeoLite2-Country.mmdb
+
+and put them in this folder.
+
+########################################

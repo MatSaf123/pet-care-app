@@ -9,7 +9,9 @@ __pycache__/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-media
+
+# media
+media/profile_pictures
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
@@ -161,3 +163,15 @@ Thumbs.db
 # End of https://www.toptal.com/developers/gitignore/api/django
 
 .idea
+
+# GeoIP databases
+
+*.mmdb
+
+# Geolocation/Addresses cache
+
+*.geo_cache
+
+# Profile pics
+
+media/profile_pictures
