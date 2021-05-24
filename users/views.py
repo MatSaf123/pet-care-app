@@ -10,7 +10,10 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 # Create your views here.
 
 def register(request):
-    """Register new user"""
+    """Register new user
+
+    :param request: user request
+    """
 
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -27,7 +30,10 @@ def register(request):
 
 @login_required
 def profile_edit(request):
-    """Edit (currently logged-in) user profile"""
+    """Edit (currently logged-in) user profile
+
+    :param request: user request
+    """
 
     if request.method == 'POST':
 
@@ -52,6 +58,12 @@ def profile_edit(request):
 
 
 def user_profile_view(request, username):
+    """Return render of a user profile page
+
+    :param request: user request
+    :param username: username of requested profile owner
+    """
+
     user = get_object_or_404(User, username=username)
     posts = Post.objects.filter(author=user)
 

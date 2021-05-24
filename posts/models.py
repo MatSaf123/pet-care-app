@@ -23,8 +23,11 @@ class Post(models.Model):
     street_address = models.CharField(max_length=100, default=None)
 
     def __str__(self):
+        """Return string representation of a Post"""
+
         return self.title
 
     def get_absolute_url(self):
         """Redirect user to home page after a post is created"""
+
         return reverse('home')

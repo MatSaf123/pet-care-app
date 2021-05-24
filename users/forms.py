@@ -3,8 +3,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from users.models import Profile
 
-from phonenumber_field.formfields import PhoneNumberField
-
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()

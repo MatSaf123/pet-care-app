@@ -20,9 +20,13 @@ class Profile(models.Model):
     description = models.TextField(default='', max_length=255, null=True, blank=True)
 
     def __str__(self):
+        """Return string representation of a profile"""
+
         return f'{self.user.username} Profile'
 
     def save(self, *args, **kwargs):
+        """Save profile in the database"""
+
         super(Profile, self).save(*args, **kwargs)
 
         img = Image.open(self.profile_pic.path)

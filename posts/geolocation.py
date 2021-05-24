@@ -9,6 +9,7 @@ import os
 
 def get_geo_from_ip(ip) -> tuple:
     """Get geometrical info from an IP address based on GeoLite2 databases.
+
     :param ip: user IP address
     :type ip: str
     :return: geometrical data
@@ -30,7 +31,10 @@ def get_geo_from_ip(ip) -> tuple:
 
 
 def get_client_ip(request):
-    """Get and return user IP address"""
+    """Get user IP address from user request
+
+    :param request: user request
+    """
 
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -41,12 +45,22 @@ def get_client_ip(request):
 
 
 def key_namer(args, kwargs):
-    """Creates a key value for checkpoint by slugifying address query"""
+    """Create a key value for checkpoint by slugifying address query
+
+    :param args: location address needed to create cache file name.
+    :param kwargs: not used, but without it passed TypeError exception is thrown
+    """
+
     return ''.join([slugify(args[0]), '.geo_cache'])
 
 
 @checkpoint(key=key_namer, work_dir='geo_cache/', refresh=False)
 def get_geo_data_from_api(geo_data: str):
+    """Make a request to remote API for geo data
+
+    :param geo_data: location given by user (post creator)
+    """
+
     # print('Making a call to remote API for:', geo_data)
     geolocator = Photon(user_agent='measurements')
     location = geolocator.geocode(geo_data)
@@ -55,7 +69,11 @@ def get_geo_data_from_api(geo_data: str):
 
 
 def initiate_map(posts: django.db.models.QuerySet, location: tuple):
-    """Initiate and return map with Posts locations marked on it, rendered as a HTML map"""
+    """Initiate and return map with Posts locations marked on it, rendered as a HTML map
+
+    :param posts: Posts saved in database meant to be displayed on a map
+    :param location: approximated location of user
+    """
 
     m = folium.Map(width=500, height=310, location=(location[2], location[3]), zoom_start=8)
 

@@ -17,6 +17,11 @@ import folium
 
 
 def home_view(request):
+    """Return render of home page with posts list and an interactive map
+
+    :param request: user request
+    """
+
     posts = Post.objects.all()
 
     # Show most common tags (top four)
@@ -34,6 +39,12 @@ def home_view(request):
 
 
 def detail_view(request, slug):
+    """Return render of a post detail page, with it's content and an interactive map
+
+    :param request: user request
+    :param slug: slug value of a post, needed to get post from the database
+    """
+
     post = get_object_or_404(Post, slug=slug)
 
     location = get_geo_data_from_api(' '.join([post.street_address, post.city, post.country]))
@@ -51,7 +62,11 @@ def detail_view(request, slug):
 
 
 def tagged(request, slug):
-    """Filter posts by tag name"""
+    """Filter posts by picked tag name
+
+    :param request: user request
+    :param slug: slug value of a post, needed to get post from the database
+    """
 
     tag = get_object_or_404(Tag, slug=slug)
     posts = Post.objects.filter(tags=tag)
@@ -68,10 +83,14 @@ def tagged(request, slug):
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
+    """Post creation view"""
+
     model = Post
     fields = ['title', 'content', 'country', 'city', 'street_address', 'tags']
 
     def form_valid(self, form):
+        """If form is valid, create a slug value for it and save the post"""
+
         form.instance.author = self.request.user
         new_post = form.save(commit=False)
 
@@ -88,11 +107,15 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """Post delete view"""
+
     model = Post
     success_url = '/'
 
     # check if active user is the original poster
     def test_func(self):
+        """Check if user trying to delete the post is it's author"""
+
         post = self.get_object()
         if self.request.user == post.author:
             return True
@@ -100,14 +123,13 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Post update view"""
+
     model = Post
     fields = ['title', 'content', 'country', 'city', 'street_address', 'tags']
 
     def get_context_data(self, **kwargs):
-        """Get context with post data to fill form when editing
-        """
-
-        # context = super(PostUpdateView, self).get_context_data(**kwargs)
+        """Get context with post data to fill form when editing"""
 
         slug = self.kwargs['slug']
 
@@ -126,10 +148,14 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 'tags': tags}
 
     def form_valid(self, form):
+        """If form is valid, update post"""
+
         form.instance.author = self.request.user
         return super().form_valid(form)
 
     def test_func(self):
+        """Check if user trying to edit the post is it's author"""
+
         post = self.get_object()
         if self.request.user == post.author:
             return True
@@ -137,4 +163,9 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 def about(request):
+    """Return render of a about page
+
+    :param request: user request
+    """
+
     return render(request, '../templates/posts/about.html', {'title': 'About'})
