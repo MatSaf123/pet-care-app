@@ -2,7 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+
+from posts.models import Post
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+
 
 # Create your views here.
 
@@ -50,4 +53,11 @@ def profile_edit(request):
 
 def user_profile_view(request, username):
     user = get_object_or_404(User, username=username)
-    return render(request, 'users/profile_detail.html', {'profile_owner': user})
+    posts = Post.objects.filter(author=user)
+
+    context = {
+        'profile_owner': user,
+        'posts': posts
+    }
+
+    return render(request, 'users/profile_detail.html', context)
