@@ -54,15 +54,16 @@
 </header>
 
 <main role="main" class="container">
-    {% block content %}{% endblock content %}
+  {% block content %}{% endblock content %}
 </main>
 
-<footer class="bg-white text-center text-lg-start">
-    <small class="text-left text-muted fixed-bottom p-3 " style="background-color: white;">
-        This product includes GeoLite2 data created by MaxMind, available from
-        <a href="https://www.maxmind.com">https://www.maxmind.com</a>.
-    </small>
+<footer class="footer bg-white text-center text-lg-start">
+  <div class="container">
+    <span class="text-muted">This product includes GeoLite2 data created by MaxMind, available from
+        <a href="https://www.maxmind.com">https://www.maxmind.com</a>.</span>
+  </div>
 </footer>
+
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
