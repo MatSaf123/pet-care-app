@@ -6,6 +6,7 @@
 - Python
 - Django
 - HTML5, CSS, JavaScript
+- Bootstrap 4
 - GeoLite2 databases
 - Leaflet, OSM data
 
