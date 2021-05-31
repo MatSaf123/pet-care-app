@@ -71,17 +71,13 @@ def user_profile_view(request, username):
     posts = Post.objects.filter(author=user)
     comments = Comment.objects.filter(profile=user.profile)
 
-    new_comment = None
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
-            print('valid')
             new_comment = comment_form.save(commit=False)
             new_comment.profile = user.profile
             new_comment.author = request.user
             new_comment.save()
-        else:
-            print('not valid')
     else:
         comment_form = CommentForm()
 
