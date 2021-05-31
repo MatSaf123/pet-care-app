@@ -1,13 +1,16 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.views.generic import CreateView
 
 from posts.models import Post
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 
 # Create your views here.
+from .models import Comment
+
 
 def register(request):
     """Register new user
@@ -66,10 +69,27 @@ def user_profile_view(request, username):
 
     user = get_object_or_404(User, username=username)
     posts = Post.objects.filter(author=user)
+    comments = Comment.objects.filter(profile=user.profile)
+
+    new_comment = None
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            print('valid')
+            new_comment = comment_form.save(commit=False)
+            new_comment.profile = user.profile
+            new_comment.author = request.user
+            new_comment.save()
+        else:
+            print('not valid')
+    else:
+        comment_form = CommentForm()
 
     context = {
         'profile_owner': user,
-        'posts': posts
+        'posts': posts,
+        'comments': comments,
+        'comment_form': comment_form
     }
 
     return render(request, 'users/profile_detail.html', context)

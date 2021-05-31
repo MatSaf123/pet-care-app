@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.utils import timezone
 
 # Pillow
 from PIL import Image
-
 
 # Create your models here.
 from phonenumber_field.modelfields import PhoneNumberField
@@ -36,3 +37,17 @@ class Profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.profile_pic.path)
+
+
+class Comment(models.Model):
+    """Profile comment model"""
+
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)  # profile that comment was posted on
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    def get_absolute_url(self):
+        """Redirect user to user profile page after a comment is posted"""
+
+        return reverse('user-profile/', self.profile.user.username)

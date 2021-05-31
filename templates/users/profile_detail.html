@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 {% block content %}
     <div class="content-section">
         <div class="media">
@@ -12,28 +13,29 @@
                     {% endif %}
                 </div>
 
-                <div class="mt-3">
-                    <h3>Contact info:</h3>
-                    {% if user.is_authenticated %}
-                        <p class="text">Email address: {{ profile_owner.email }}</p>
-                        <p class="text">Phone number: {{ profile_owner.profile.phone_number }}</p>
-                    {% else %}
-                        <div class="text-center">
-                        <a href="{% url 'login' %}" type="button" class="btn btn-outline-success">Log in to see this user contact
-                            info</a>
-                        </div>
-                    {% endif %}
+                <h3>Contact info:</h3>
+                <div class="p-2 m-1">
+                    <div class="mt-3">
+                        {% if user.is_authenticated %}
+                            <p class="text">Email address: {{ profile_owner.email }}</p>
+                            <p class="text">Phone number: {{ profile_owner.profile.phone_number }}</p>
+                        {% else %}
+                            <div class="text-center">
+                            <a href="{% url 'login' %}" type="button" class="btn btn-outline-success">Log in to see this user contact
+                                info</a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-3">
+                        <p class="text">From: {{ profile_owner.profile.city }} {{ profile_owner.profile.country }}</p>
+                        <p class="text">About me: {{ profile_owner.profile.description }}</p>
+                    </div>
                 </div>
-
-                <div class="mt-3">
-                    <p class="text">From: {{ profile_owner.profile.city }} {{ profile_owner.profile.country }}</p>
-                    <p class="text">About me: {{ profile_owner.profile.description }}</p>
-                </div>
-
-            <h3>Posts made by this user:</h3>
-
             </div>
         </div>
+
+        <h3>Posts made by this user:</h3>
 
         <div class="container">
             <ul class="list-group">
@@ -65,5 +67,50 @@
                 {% endif %}
             </ul>
         </div>
+
+        <h3>Comments on this user:</h3>
+
+            <div class="container">
+            <ul class="list-group">
+                {% for comment in comments %}
+                    <div class="col">
+                        <div class="cards">
+                            <div class="row no-gutters border rounded  flex-md-row mb-4 shadow-sm h-md-250">
+                                <div class="col p-4 d-flex flex-column position-static">
+                                    <p>Posted by: <a
+                                            href="{% url 'user-profile' comment.author.username %}">{{ comment.author.username }}</a>
+                                        at {{ comment.date_posted }}</p>
+                                    <p>{{ comment.content }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if comments.count == 0 %}
+                    <div class="text-center mt-3 pt-2">
+                        <a class="text-muted">No comments on this user yet.</a>
+                    </div>
+                {% endif %}
+            </ul>
+        </div>
     </div>
+
+    <form method="post">
+        {% csrf_token %}    <!-- required security token -->
+
+        <div id="div_id_content" class="control-group p-2 m-1">
+            <label for="id_content" class="control-label requiredField">Write a comment about this user:</label>
+            <div class="controls"> <textarea name="content" class="form-control" required id="id_content">
+            </textarea>
+            </div>
+        </div>
+
+        <div class="media-body p-2 m-1">
+            {% if user.is_authenticated  %}
+                <button type="submit" class="btn btn-success btn-lg btn-block">Post comment</button>
+            {% else %}
+                <a href="{% url 'login' %}" type="button" class="btn btn-success btn-lg btn-block">Post comment</a>
+            {% endif %}
+        </div>
+    </form>
 {% endblock content %}
