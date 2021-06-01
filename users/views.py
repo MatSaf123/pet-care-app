@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import DeleteView
 
 from posts.models import Post
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
@@ -75,10 +75,10 @@ def user_profile_view(request, username):
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.profile = user.profile
-            new_comment.author = request.user
-            new_comment.save()
+            comment = comment_form.save(commit=False)
+            comment.profile = user.profile
+            comment.author = request.user
+            comment.save()
     else:
         comment_form = CommentForm()
 
@@ -93,17 +93,16 @@ def user_profile_view(request, username):
 
 
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    """Post delete view"""
+    """Comment delete view"""
 
     model = Comment
-    # profile = model.profile.user.username
 
     def get_success_url(self):
+        """Redirect to user profile page after deleting comment"""
+
         username = self.kwargs['username']
         return reverse('user-profile', kwargs={'username': username})
 
-
-    # check if active user is the original poster
     def test_func(self):
         """Check if user trying to delete the comment is it's author"""
 
