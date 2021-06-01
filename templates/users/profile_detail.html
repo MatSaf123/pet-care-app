@@ -81,6 +81,11 @@
                                             href="{% url 'user-profile' comment.author.username %}">{{ comment.author.username }}</a>
                                         at {{ comment.date_posted }}</p>
                                     <p>{{ comment.content }}</p>
+                                    {% if comment.author == user  %}
+                                        <row>
+                                            <a class="btn btn-danger" id="lowerButton" href="{% url 'user-profile-delete-comment' comment.profile.user.username comment.id %}">Delete</a>
+                                        </row>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

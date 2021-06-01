@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.views.generic import CreateView
+from django.urls import reverse
+from django.views.generic import CreateView, DeleteView
 
 from posts.models import Post
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
@@ -89,3 +90,24 @@ def user_profile_view(request, username):
     }
 
     return render(request, 'users/profile_detail.html', context)
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """Post delete view"""
+
+    model = Comment
+    # profile = model.profile.user.username
+
+    def get_success_url(self):
+        username = self.kwargs['username']
+        return reverse('user-profile', kwargs={'username': username})
+
+
+    # check if active user is the original poster
+    def test_func(self):
+        """Check if user trying to delete the comment is it's author"""
+
+        comment = self.get_object()
+        if self.request.user == comment.author:
+            return True
+        return False

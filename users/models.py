@@ -46,8 +46,3 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
-
-    def get_absolute_url(self):
-        """Redirect user to user profile page after a comment is posted"""
-
-        return reverse('user-profile/', self.profile.user.username)
