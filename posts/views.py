@@ -169,3 +169,13 @@ def about(request):
     """
 
     return render(request, '../templates/posts/about.html', {'title': 'About'})
+
+
+def all_tags_view(request):
+    """List all available tags
+
+    :param request: user request
+    """
+
+    tags = Post.tags.all()
+    return render(request, '../templates/posts/all_tags.html', {'tags': tags})

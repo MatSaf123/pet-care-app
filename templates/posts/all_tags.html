@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
+<p class="media-body p-2 my-1">All Tags:
+    {% for tag in tags %}
+        <a href="{% url 'tagged' tag %}" class="badge badge-success">{{tag}}</a>
+    {% endfor %}
+</p>
+
+{% endblock content %}
