@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col">
+            <ul class="list-group">
+            {% for user in users %}
+                <div class="cards">
+                    <div class="row no-gutters border rounded  flex-md-row mb-4 shadow-sm h-md-250">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <h3><a href="{% url 'user-profile' user.username %}">{{ user.username }}<img class="rounded-circle account-img-small" src="{{ user.profile.profile_pic.url }}"></a></h3>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col">
+            <form method='POST'>
+                {% csrf_token %}    <!-- required security token -->
+
+                <div id="div_reqested_username" class="control-group mb-1">
+                    <div class="controls"> 
+                        <input type='text' name="reqested_username" class="form-control" required id="reqested_username" placeholder="Find by username...">
+                    </div>
+                </div>
+
+                <input type="submit" class="btn btn-success btn-lg btn-block">
+            </form>
+
+        </div>
+    
+    </div>
+
+</div>
+
+
+{% endblock content %}

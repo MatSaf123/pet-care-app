@@ -110,3 +110,15 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == comment.author:
             return True
         return False
+
+def all_users_view(request):
+    """Get all users list. Alternatively, get filtered users list"""
+
+    if request.method == 'POST':
+        # filter by requested username
+        username = request.POST.get("reqested_username")
+        users = User.objects.filter(username__startswith=username)
+    else:
+        users = User.objects.all()
+
+    return render(request, 'users/all_users.html', {'users': users})
