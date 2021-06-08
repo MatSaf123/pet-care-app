@@ -1,10 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
 
-<p class="media-body p-2 my-1">All Tags:
-    {% for tag in tags %}
-        <a href="{% url 'tagged' tag %}" class="badge badge-success">{{tag}}</a>
-    {% endfor %}
-</p>
+<div class="container">
+    <div class="row">
 
+        <div class="col">
+
+            <p class="media-body p-2 my-1">All Tags:
+                {% for tag in tags %}
+                    <a href="{% url 'tagged' tag %}" class="badge mr-1 badge badge-success">{{tag}}</a>
+                {% endfor %}
+            </p>
+
+        </div>
+
+        <div class="col">
+
+            <form method='POST'>
+                {% csrf_token %}    <!-- required security token -->
+            
+                <div id="div_requested_tag" class="control-group mb-1">
+                    <div class="controls"> 
+                        <input type='text' name="requested_tag" class="form-control" required id="requested_tag" placeholder="Search for posts with tag...">
+                    </div>
+                </div>
+            
+                <input type="submit" class="btn btn-success">
+            </form>
+
+        </div>
+
+    </div>
+</div>
 {% endblock content %}

@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.template.defaultfilters import slugify
 from django.views.generic import CreateView, DeleteView, UpdateView
 from .models import Post
@@ -177,5 +177,12 @@ def all_tags_view(request):
     :param request: user request
     """
 
-    tags = Post.tags.all()
+    if request.method == 'POST':
+        # filter by requested username
+        requested_tag = request.POST.get("requested_tag")
+        tags = Post.tags.filter(name__startswith=requested_tag)
+    else:
+        tags = Post.tags.all()
+
+    
     return render(request, '../templates/posts/all_tags.html', {'tags': tags})
