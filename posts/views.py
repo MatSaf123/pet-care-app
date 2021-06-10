@@ -22,6 +22,8 @@ def home_view(request):
     :param request: user request
     """
 
+    # TODO: add POST method for filtering help requests and help offers
+
     posts = Post.objects.all()
 
     # Show most common tags (top four)
@@ -49,8 +51,14 @@ def detail_view(request, slug):
 
     location = get_geo_data_from_api(' '.join([post.street_address, post.city, post.country]))
 
+    if post.type_of_post == 'HO':
+        color = 'blue'
+    else:
+        color = 'red'
+
     m = folium.Map(width=500, height=310, location=(location.latitude, location.longitude), zoom_start=16)
-    folium.Marker([location.latitude, location.longitude], icon=folium.Icon(color='red')).add_to(m)
+
+    folium.Marker([location.latitude, location.longitude], icon=folium.Icon(color=color)).add_to(m)
 
     m = m._repr_html_()
 
@@ -86,7 +94,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     """Post creation view"""
 
     model = Post
-    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags']
+    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags', 'type_of_post']
 
     def form_valid(self, form):
         """If form is valid, create a slug value for it and save the post"""
@@ -126,7 +134,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """Post update view"""
 
     model = Post
-    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags']
+    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags', 'type_of_post']
 
     def get_context_data(self, **kwargs):
         """Get context with post data to fill form when editing"""
@@ -144,8 +152,10 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         tags = [str(tag) for tag in post_data[0].tags.all()]
         tags = ','.join(tags)
 
+        type_of_post = post_data[0].type_of_post
+
         return {'title': title, 'content': content, 'country': country, 'city': city, 'street_address': street_address,
-                'tags': tags}
+                'tags': tags, 'type_of_post': type_of_post}
 
     def form_valid(self, form):
         """If form is valid, update post"""

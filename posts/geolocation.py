@@ -83,8 +83,14 @@ def initiate_map(posts: django.db.models.QuerySet, location: tuple):
     for post in posts:
         geo_data = ' '.join([post.street_address, post.city, post.country])
         location = get_geo_data_from_api(geo_data)
+        
+        if post.type_of_post == 'HO':
+            color = 'blue'
+        else:
+            color = 'red'
+
         folium.Marker([location.latitude, location.longitude], popup=post.title,
-                      icon=folium.Icon(color='red')).add_to(m)
+                      icon=folium.Icon(color=color)).add_to(m)
 
     m = m._repr_html_()
 
