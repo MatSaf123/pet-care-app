@@ -27,15 +27,16 @@ def home_view(request):
         if not type_of_post:
             posts = Post.objects.all()
         else:
-            posts = Post.objects.filter(type_of_post=type_of_post) 
+            posts = Post.objects.filter(type_of_post=type_of_post)
     else:
-        posts = Post.objects.all() 
-        
+        posts = Post.objects.all()
+
     # Show most common tags (top four)
     common_tags = Post.tags.most_common()[:4]
     ip = get_client_ip(request)
     m = initiate_map(posts, get_geo_from_ip(ip))
-
+    print(m)
+    
     context = {
         'posts': posts,
         'common_tags': common_tags,
@@ -52,15 +53,29 @@ def detail_view(request, slug):
     """
 
     post = get_object_or_404(Post, slug=slug)
-    location = get_geo_data_from_api(' '.join([post.street_address, post.city, post.country]))
+    location = get_geo_data_from_api(
+        ' '.join([post.street_address, post.city, post.country]))
 
     if post.type_of_post == 'HO':
         color = 'blue'
     else:
         color = 'red'
 
-    m = folium.Map(width=500, height=310, location=(location.latitude, location.longitude), zoom_start=16)
-    folium.Marker([location.latitude, location.longitude], icon=folium.Icon(color=color)).add_to(m)
+    m = folium.Map(
+        width=500,
+        height=310,
+        location=(location.latitude,
+                  location.longitude),
+        zoom_start=16)
+
+    folium.Marker(
+        [
+            location.latitude,
+            location.longitude
+        ],
+        icon=folium.Icon(color=color)
+    ).add_to(m)
+
     m = m._repr_html_()
 
     context = {
@@ -82,9 +97,9 @@ def tagged(request, slug):
         if not type_of_post:
             posts = Post.objects.all()
         else:
-            posts = Post.objects.filter(type_of_post=type_of_post) 
+            posts = Post.objects.filter(type_of_post=type_of_post)
     else:
-        posts = Post.objects.all() 
+        posts = Post.objects.all()
 
     tag = get_object_or_404(Tag, slug=slug)
     posts = posts.filter(tags=tag)
@@ -103,7 +118,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     """Post creation view"""
 
     model = Post
-    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags', 'type_of_post']
+    fields = ['title', 'content', 'country', 'city',
+              'street_address', 'tags', 'type_of_post']
 
     def form_valid(self, form):
         """If form is valid, create a slug value for it and save the post"""
@@ -140,7 +156,8 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """Post update view"""
 
     model = Post
-    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags', 'type_of_post']
+    fields = ['title', 'content', 'country', 'city',
+              'street_address', 'tags', 'type_of_post']
 
     def get_context_data(self, **kwargs):
         """Get context with post data to fill form when editing"""
@@ -205,5 +222,4 @@ def all_tags_view(request):
     else:
         tags = Post.tags.all()
 
-    
     return render(request, '../templates/posts/all_tags.html', {'tags': tags})
