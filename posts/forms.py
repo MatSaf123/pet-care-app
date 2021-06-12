@@ -11,6 +11,7 @@ class PostForm(forms.ModelForm):
             'content',
             'country',
             'city',
-            'street_address'
+            'street_address',
             'tags',
+            'type_of_post',
         ]

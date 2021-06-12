@@ -22,11 +22,17 @@ def home_view(request):
     :param request: user request
     """
 
-    posts = Post.objects.all()
-
+    if request.method == 'POST':
+        type_of_post = request.POST.get("type_of_post")
+        if not type_of_post:
+            posts = Post.objects.all()
+        else:
+            posts = Post.objects.filter(type_of_post=type_of_post) 
+    else:
+        posts = Post.objects.all() 
+        
     # Show most common tags (top four)
     common_tags = Post.tags.most_common()[:4]
-
     ip = get_client_ip(request)
     m = initiate_map(posts, get_geo_from_ip(ip))
 
@@ -46,12 +52,15 @@ def detail_view(request, slug):
     """
 
     post = get_object_or_404(Post, slug=slug)
-
     location = get_geo_data_from_api(' '.join([post.street_address, post.city, post.country]))
 
-    m = folium.Map(width=500, height=310, location=(location.latitude, location.longitude), zoom_start=16)
-    folium.Marker([location.latitude, location.longitude], icon=folium.Icon(color='red')).add_to(m)
+    if post.type_of_post == 'HO':
+        color = 'blue'
+    else:
+        color = 'red'
 
+    m = folium.Map(width=500, height=310, location=(location.latitude, location.longitude), zoom_start=16)
+    folium.Marker([location.latitude, location.longitude], icon=folium.Icon(color=color)).add_to(m)
     m = m._repr_html_()
 
     context = {
@@ -68,9 +77,17 @@ def tagged(request, slug):
     :param slug: slug value of a post, needed to get post from the database
     """
 
-    tag = get_object_or_404(Tag, slug=slug)
-    posts = Post.objects.filter(tags=tag)
+    if request.method == 'POST':
+        type_of_post = request.POST.get("type_of_post")
+        if not type_of_post:
+            posts = Post.objects.all()
+        else:
+            posts = Post.objects.filter(type_of_post=type_of_post) 
+    else:
+        posts = Post.objects.all() 
 
+    tag = get_object_or_404(Tag, slug=slug)
+    posts = posts.filter(tags=tag)
     ip = get_client_ip(request)
     m = initiate_map(posts, get_geo_from_ip(ip))
 
@@ -86,20 +103,17 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     """Post creation view"""
 
     model = Post
-    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags']
+    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags', 'type_of_post']
 
     def form_valid(self, form):
         """If form is valid, create a slug value for it and save the post"""
 
         form.instance.author = self.request.user
         new_post = form.save(commit=False)
-
         # random string to add to the slug
         letters = string.ascii_letters
         random_string = ''.join(random.choice(letters) for i in range(16))
-
         new_post.slug = slugify(''.join([new_post.title, random_string]))
-
         new_post.save()
         form.save_m2m()
 
@@ -126,26 +140,33 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """Post update view"""
 
     model = Post
-    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags']
+    fields = ['title', 'content', 'country', 'city', 'street_address', 'tags', 'type_of_post']
 
     def get_context_data(self, **kwargs):
         """Get context with post data to fill form when editing"""
 
         slug = self.kwargs['slug']
+        post = Post.objects.get(slug=slug)
 
-        post_data = Post.objects.filter(slug=slug)
+        title = post.title
+        content = post.content
+        country = post.country
+        city = post.city
+        street_address = post.street_address
+        tags = ','.join([str(tag) for tag in post.tags.all()])
+        type_of_post = post.type_of_post
 
-        title = post_data[0].title
-        content = post_data[0].content
-        country = post_data[0].country
-        city = post_data[0].city
-        street_address = post_data[0].street_address
+        context = {
+            'title': title,
+            'content': content,
+            'country': country,
+            'city': city,
+            'street_address': street_address,
+            'tags': tags,
+            'type_of_post': type_of_post
+        }
 
-        tags = [str(tag) for tag in post_data[0].tags.all()]
-        tags = ','.join(tags)
-
-        return {'title': title, 'content': content, 'country': country, 'city': city, 'street_address': street_address,
-                'tags': tags}
+        return context
 
     def form_valid(self, form):
         """If form is valid, update post"""
