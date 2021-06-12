@@ -35,7 +35,6 @@ def home_view(request):
     common_tags = Post.tags.most_common()[:4]
     ip = get_client_ip(request)
     m = initiate_map(posts, get_geo_from_ip(ip))
-    print(m)
     
     context = {
         'posts': posts,
