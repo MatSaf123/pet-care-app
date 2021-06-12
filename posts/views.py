@@ -22,8 +22,15 @@ def home_view(request):
     :param request: user request
     """
 
-    # TODO: add POST method for filtering help requests and help offers
-    posts = Post.objects.all()
+    if request.method == 'POST':
+        type_of_post = request.POST.get("type_of_post")
+        if not type_of_post:
+            posts = Post.objects.all()
+        else:
+            posts = Post.objects.filter(type_of_post=type_of_post) 
+    else:
+        posts = Post.objects.all() 
+        
     # Show most common tags (top four)
     common_tags = Post.tags.most_common()[:4]
     ip = get_client_ip(request)
@@ -70,8 +77,17 @@ def tagged(request, slug):
     :param slug: slug value of a post, needed to get post from the database
     """
 
+    if request.method == 'POST':
+        type_of_post = request.POST.get("type_of_post")
+        if not type_of_post:
+            posts = Post.objects.all()
+        else:
+            posts = Post.objects.filter(type_of_post=type_of_post) 
+    else:
+        posts = Post.objects.all() 
+
     tag = get_object_or_404(Tag, slug=slug)
-    posts = Post.objects.filter(tags=tag)
+    posts = posts.filter(tags=tag)
     ip = get_client_ip(request)
     m = initiate_map(posts, get_geo_from_ip(ip))
 
