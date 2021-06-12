@@ -29,7 +29,7 @@ class Post(models.Model):
     # ADDRESS
     country = models.CharField(max_length=100, default='')
     city = models.CharField(max_length=100, default='')
-    street_address = models.CharField(max_length=100, default='')
+    street_address = models.CharField(max_length=100, default='', blank=True)
 
     type_of_post = models.CharField( max_length=2, choices=TYPES_OF_POSTS, default=HELP_REQUEST)
 

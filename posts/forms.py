@@ -15,3 +15,7 @@ class PostForm(forms.ModelForm):
             'tags',
             'type_of_post',
         ]
+    
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.fields['street_address'].required = False

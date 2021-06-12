@@ -61,10 +61,10 @@ def get_geo_data_from_api(geo_data: str):
     :param geo_data: location given by user (post creator)
     """
 
-    # print('Making a call to remote API for:', geo_data)
+    print('Making a call to remote API for:', geo_data)
     geolocator = Photon(user_agent='measurements')
     location = geolocator.geocode(geo_data)
-
+    print('Returned: ',location)
     return location
 
 
