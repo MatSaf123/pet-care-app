@@ -6,7 +6,6 @@ from ediblepickle import checkpoint
 from django.template.defaultfilters import slugify
 import os
 
-
 def get_geo_from_ip(ip) -> tuple:
     """Get geometrical info from an IP address based on GeoLite2 databases.
 
@@ -75,7 +74,11 @@ def initiate_map(posts: django.db.models.QuerySet, location: tuple):
     :param location: approximated location of user
     """
 
-    m = folium.Map(width=500, height=310, location=(location[2], location[3]), zoom_start=8)
+    latitude = location[2]
+    longitude = location[3]
+
+    m = folium.Map(width=500, height=310, location=(
+        latitude, longitude), zoom_start=8)
 
     if not os.path.exists('geo_cache/'):
         os.mkdir('geo_cache/')
@@ -83,15 +86,19 @@ def initiate_map(posts: django.db.models.QuerySet, location: tuple):
     for post in posts:
         geo_data = ' '.join([post.street_address, post.city, post.country])
         location = get_geo_data_from_api(geo_data)
-        
+
         if post.type_of_post == 'HO':
             color = 'blue'
         else:
             color = 'red'
 
-        folium.Marker([location.latitude, location.longitude], popup=post.title,
+        url = f'<a href="/post/{post.slug}/">{post.title}</a>'
+
+        folium.Marker([location.latitude, location.longitude], popup=url,
                       icon=folium.Icon(color=color)).add_to(m)
 
-    m = m._repr_html_()
 
+    m = m._repr_html_()
+    #m = m.get_root().render()
     return m
+
