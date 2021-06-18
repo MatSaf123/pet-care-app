@@ -60,10 +60,10 @@ def get_geo_data_from_api(geo_data: str):
     :param geo_data: location given by user (post creator)
     """
 
-    print('Making a call to remote API for:', geo_data)
+    # print('Making a call to remote API for:', geo_data)
     geolocator = Photon(user_agent='measurements')
     location = geolocator.geocode(geo_data)
-    print('Returned: ',location)
+
     return location
 
 
@@ -77,7 +77,7 @@ def initiate_map(posts: django.db.models.QuerySet, location: tuple):
     latitude = location[2]
     longitude = location[3]
 
-    m = folium.Map(width=500, height=310, location=(
+    m = folium.Map(width='100%', heigth='100%', location=(
         latitude, longitude), zoom_start=8)
 
     if not os.path.exists('geo_cache/'):
@@ -92,7 +92,7 @@ def initiate_map(posts: django.db.models.QuerySet, location: tuple):
         else:
             color = 'red'
 
-        url = f'<a href="/post/{post.slug}/">{post.title}</a>'
+        url = f'<a href="/post/{post.slug}/">{post.title}</a> (Open me in new window!)'
 
         folium.Marker([location.latitude, location.longitude], popup=url,
                       icon=folium.Icon(color=color)).add_to(m)

@@ -61,8 +61,8 @@ def detail_view(request, slug):
         color = 'red'
 
     m = folium.Map(
-        width=500,
-        height=310,
+        width='100%',
+        height='100%',
         location=(location.latitude,
                   location.longitude),
         zoom_start=16)
