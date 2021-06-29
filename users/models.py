@@ -14,10 +14,10 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.ImageField(default='default.png', upload_to='profile_pictures')
-    phone_number = PhoneNumberField(default='', null=True, blank=True)
-    country = models.CharField(default='', max_length=64, null=True, blank=True)
-    city = models.CharField(default='', max_length=64, null=True, blank=True)
-    description = models.TextField(default='', max_length=255, null=True, blank=True)
+    phone_number = PhoneNumberField(default=None, null=True, blank=True)
+    country = models.CharField(default=None, max_length=64, null=True, blank=True)
+    city = models.CharField(default=None, max_length=64, null=True, blank=True)
+    description = models.TextField(default=None, max_length=255, null=True, blank=True)
 
     def __str__(self):
         """Return string representation of a profile"""
