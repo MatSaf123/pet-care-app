@@ -1,23 +1,20 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.template.defaultfilters import slugify
 from django.views.generic import CreateView, DeleteView, UpdateView
 from .models import Post
 from taggit.models import Tag
-
-# Utils
-import string
-import random
-
-# Geolocation
 from .geolocation import get_client_ip, get_geo_from_ip, get_geo_data_from_api, initiate_map
 import folium
+import string
+import random
 
 # Create your views here.
 
 
-def home_view(request):
-    """Return render of home page with posts list and an interactive map
+def home_view(request) -> HttpResponse:
+    """View for displaying the home page, containing posts list and an interactive map render.
 
     :param request: user request
     """
@@ -33,6 +30,8 @@ def home_view(request):
 
     # Show most common tags (top four)
     common_tags = Post.tags.most_common()[:4]
+
+    # Initiate the map
     ip = get_client_ip(request)
     m = initiate_map(posts, get_geo_from_ip(ip))
     
@@ -41,11 +40,13 @@ def home_view(request):
         'common_tags': common_tags,
         'map': m
     }
+
     return render(request, '../templates/posts/home.html', context)
 
 
-def detail_view(request, slug):
-    """Return render of a post detail page, with it's content and an interactive map
+def detail_view(request, slug) -> HttpResponse:
+    """View for displaying detail screen of a post, with it's detail info
+    and an interactive map render.
 
     :param request: user request
     :param slug: slug value of a post, needed to get post from the database
@@ -55,6 +56,8 @@ def detail_view(request, slug):
     location = get_geo_data_from_api(
         ' '.join([post.street_address, post.city, post.country]))
 
+
+    # Initiate the map
     if post.type_of_post == 'HO':
         color = 'blue'
     else:
@@ -63,8 +66,7 @@ def detail_view(request, slug):
     m = folium.Map(
         width='100%',
         height='100%',
-        location=(location.latitude,
-                  location.longitude),
+        location=(location.latitude, location.longitude),
         zoom_start=16)
 
     folium.Marker(
@@ -81,11 +83,12 @@ def detail_view(request, slug):
         'post': post,
         'map': m
     }
+
     return render(request, '../templates/posts/detail.html', context)
 
 
-def tagged(request, slug):
-    """Filter posts by picked tag name
+def tagged_view(request, slug) -> HttpResponse:
+    """View for displaying home page containing only posts tagged with chosen tag.
 
     :param request: user request
     :param slug: slug value of a post, needed to get post from the database
@@ -102,6 +105,8 @@ def tagged(request, slug):
 
     tag = get_object_or_404(Tag, slug=slug)
     posts = posts.filter(tags=tag)
+
+    # Initiate the map
     ip = get_client_ip(request)
     m = initiate_map(posts, get_geo_from_ip(ip))
 
@@ -110,18 +115,19 @@ def tagged(request, slug):
         'posts': posts,
         'map': m
     }
+
     return render(request, '../templates/posts/home.html', context)
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
-    """Post creation view"""
+    """View for creating a new post."""
 
     model = Post
     fields = ['title', 'content', 'country', 'city',
               'street_address', 'tags', 'type_of_post']
 
-    def form_valid(self, form):
-        """If form is valid, create a slug value for it and save the post"""
+    def form_valid(self, form) -> HttpResponse:
+        """If form is valid, create a slug value for it and save the post."""
 
         form.instance.author = self.request.user
         new_post = form.save(commit=False)
@@ -136,14 +142,14 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    """Post delete view"""
+    """View for deleting a post."""
 
     model = Post
     success_url = '/'
 
     # check if active user is the original poster
-    def test_func(self):
-        """Check if user trying to delete the post is it's author"""
+    def test_func(self) -> bool:
+        """Check if user trying to delete the post is it's author."""
 
         post = self.get_object()
         if self.request.user == post.author:
@@ -152,14 +158,14 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """Post update view"""
+    """View for updating (editing) a post."""
 
     model = Post
     fields = ['title', 'content', 'country', 'city',
               'street_address', 'tags', 'type_of_post']
 
-    def get_context_data(self, **kwargs):
-        """Get context with post data to fill form when editing"""
+    def get_context_data(self, **kwargs) -> dict:
+        """Get context with post data to fill form when editing."""
 
         slug = self.kwargs['slug']
         post = Post.objects.get(slug=slug)
@@ -184,13 +190,13 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         return context
 
-    def form_valid(self, form):
-        """If form is valid, update post"""
+    def form_valid(self, form) -> HttpResponse:
+        """If form is valid, update post."""
 
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-    def test_func(self):
+    def test_func(self) -> bool:
         """Check if user trying to edit the post is it's author"""
 
         post = self.get_object()
@@ -199,8 +205,8 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return False
 
 
-def about(request):
-    """Return render of a about page
+def about_view(request) -> HttpResponse:
+    """View for displaying 'About' page.
 
     :param request: user request
     """
@@ -208,8 +214,8 @@ def about(request):
     return render(request, '../templates/posts/about.html', {'title': 'About'})
 
 
-def all_tags_view(request):
-    """List all available tags
+def all_tags_view(request) -> HttpResponse:
+    """View for displaying page with all tags listed on it.
 
     :param request: user request
     """

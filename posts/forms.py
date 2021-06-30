@@ -4,6 +4,8 @@ from .models import Post
 
 
 class PostForm(forms.ModelForm):
+    """Form for creating new posts."""
+
     class Meta:
         model = Post
         fields = [
@@ -18,4 +20,4 @@ class PostForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
-        self.fields['street_address'].required = False
+        self.fields['street_address'].required = False # street address not required

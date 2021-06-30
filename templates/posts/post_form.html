@@ -28,8 +28,14 @@
                     <label for="id_type_of_post" class="control-label">Type of post:</label>
                     <div class="controls"> 
                         <select name="type_of_post" class="form-select" id="id_type_of_post"> 
-                            <option value="HR" selected>Help request</option> 
-                            <option value="HO">Help offer</option>
+
+                            {% if  help_request == HO %}
+                                <option value="HR">Help request</option> 
+                                <option value="HO" selected>Help offer</option>
+                            {% else %}
+                                <option value="HR" selected>Help request</option> 
+                                <option value="HO">Help offer</option>
+                            {% endif %}
                         </select> 
                     </div> 
                 </div>

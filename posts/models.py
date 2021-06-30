@@ -34,12 +34,12 @@ class Post(models.Model):
     type_of_post = models.CharField( max_length=2, choices=TYPES_OF_POSTS, default=HELP_REQUEST)
 
 
-    def __str__(self):
-        """Return string representation of a Post"""
+    def __str__(self) -> str:
+        """Return string representation of a Post."""
 
         return self.title
 
-    def get_absolute_url(self):
-        """Redirect user to home page after a post is created"""
+    def get_absolute_url(self) -> str:
+        """Redirect user to home page after a post is created."""
 
         return reverse('home')
