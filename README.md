@@ -1,6 +1,6 @@
 # PetCare: web platform to help animals in need
 
-<img src="/MatSaf123/pet-care-app/raw/master/media/readme_pictures/petcare.gif" width="500" height="300">
+<img src="/MatSaf123/pet-care-app/blob/master/media/readme_pictures/petcare.gif" width="500" height="300">
 
 
 #
@@ -46,22 +46,22 @@
 ### Screens:
 
 ##### Home screen
-<img src="/MatSaf123/pet-care-app/raw/master/media/readme_pictures/1.png" width="500" height="300">
+<img src="/MatSaf123/pet-care-app/blob/master/media/readme_pictures/1.png" width="500" height="300">
 
 #### Post detail screen
-<img src="/MatSaf123/pet-care-app/raw/master/media/readme_pictures/2.png" width="500" height="300">
+<img src="/MatSaf123/pet-care-app/blob/master/media/readme_pictures/2.png" width="500" height="300">
 
 #### Users list
-<img src="/MatSaf123/pet-care-app/raw/master/media/readme_pictures/3.png" width="500" height="300">
+<img src="/MatSaf123/pet-care-app/blob/master/media/readme_pictures/3.png" width="500" height="300">
 
 #### Users list after filtering results
-<img src="/MatSaf123/pet-care-app/raw/master/media/readme_pictures/4.png" width="500" height="300">
+<img src="/MatSaf123/pet-care-app/blob/master/media/readme_pictures/4.png" width="500" height="300">
 
 #### User profile detail screen
-<img src="/MatSaf123/pet-care-app/raw/master/media/readme_pictures/5.png" width="500" height="300">
+<img src="/MatSaf123/pet-care-app/blob/master/media/readme_pictures/5.png" width="500" height="300">
 
 #### Post creation form
-<img src="/MatSaf123/pet-care-app/raw/master/media/readme_pictures/6.png" width="500" height="300">
+<img src="/MatSaf123/pet-care-app/blob/master/media/readme_pictures/6.png" width="500" height="300">
 
 ### Issues:
 
