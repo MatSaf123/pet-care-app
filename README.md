@@ -1,6 +1,10 @@
 # PetCare: web platform to help animals in need
 
+<<<<<<< HEAD
 <img src="media/readme_pictures/petcare.gif" width="500" height="300">
+=======
+<img src="/MatSaf123/pet-care-app/blob/master/media/readme_pictures/petcare.gif" width="500" height="300">
+>>>>>>> fa628fb44f95097c818840ff74575542a0d8aac6
 
 
 #
