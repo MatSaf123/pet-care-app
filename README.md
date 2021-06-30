@@ -1,6 +1,6 @@
 # PetCare: web platform to help animals in need
 
-<img src="media/readme_pictures/petcare.gif" width="500" height="300">
+<img src="media/readme_pictures/petcare.gif" width="1200" height="450">
 
 
 #
