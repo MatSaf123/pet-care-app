@@ -7,8 +7,8 @@
 
 Python-Django powered web platform meant to help organizing volunteer activities towards animals in need, allowing both people in need of help and people willing to help then to communicate and commit to bettering animal lives.
 
-<div style="text-align:center">    <img src="media/readme_pictures/petcare.gif" width="60%" height="60%">
-</div>
+<p align="center">    <img src="media/readme_pictures/main_petcare.gif" width="100%" height="60%">
+</p>
 
 #
 
@@ -17,7 +17,6 @@ Python-Django powered web platform meant to help organizing volunteer activities
 Get PetCare from Github.
 ```
 git clone https://github.com/MatSaf123/pet-care-app.git
-
 ```
 Create new virtual environment, activate it and instal requirements.
 
@@ -76,7 +75,8 @@ python manage.py createsuperuser
     - access to post map
     - map initialization on approximated user location (IP geolocation with GeoLite2)
     - browsing comments on user's profiles
-    
+    - filtering posts, tags, profiles
+
 
 - for logged-in user:
     - all of above
@@ -98,27 +98,48 @@ python manage.py createsuperuser
 
 ## Screens:
 
-<div style="text-align:center">
+### Home screen
 
-#### Home screen
-<img src="media/readme_pictures/1.png" width="70%" height="70%">
+Posts list on the left, alongside post creation button, sorting form and a set of most popular tags. On the right: interactive map representing posts from the list (their locations) .
+
+<p align="center">
+    <img src="media/readme_pictures/1.png" width="80%" height="80%">
+</p>
 
 ### Post detail screen
-<img src="media/readme_pictures/2.png" width="70%" height="70%">
 
-### Users list
-<img src="media/readme_pictures/3.png" width="70%" height="70%">
+Contains all the details and informations about picked post; author's username redirects to his profile.
 
-### Users list before and after filtering results
-<img src="media/readme_pictures/4.png" width="70%" height="70%">
+<p align="center">
+    <img src="media/readme_pictures/2.png" width="80%" height="80%">
+</p>
 
-### User profile detail screen
-<img src="media/readme_pictures/5.png" width="70%" height="70%">
+### Post creation process
 
-### Post creation form
-<img src="media/readme_pictures/6.png" width="70%" height="70%">
+The whole process of adding a new post by a registered, logged in user.
 
-</div>
+<p align="center">
+    <img src="media/readme_pictures/post_creation.gif" width="100%" height="100%">
+</p>
+
+### Users section and user profile detail screen
+
+List of users on the left, sorting form on the right. Also, user unique profile with list of posts created by him and comments on him added by other users.
+
+<p align="center">
+    <img src="media/readme_pictures/user_and_profile.gif" width="100%" height="100%">
+</p>
+
+
+### Tags screen
+
+All tags available are listed here.
+
+<p align="center">
+    <img src="media/readme_pictures/tags.gif" width="100%" height="100%">
+</p>
+
+
 
 ## Issues:
 
@@ -135,9 +156,9 @@ Map technology powered by <a href="https://leafletjs.com/">Leaflet</a> and <a hr
 
 #
 
-<div style="text-align:center">
-<img src="media/readme_pictures/kapoo.gif" width="30%" height="30%">
-</div>
+<p align="center">
+    <img src="media/readme_pictures/kapoo.gif" width="30%" height="30%">
+</p>
 
 Mateusz Safaryjski / MatSaf123 
 
