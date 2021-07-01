@@ -7,7 +7,7 @@
 
 Python-Django powered web platform meant to help organizing volunteer activities towards animals in need, allowing both people in need of help and people willing to help then to communicate and commit to bettering animal lives.
 
-<p align="center">    <img src="media/readme_pictures/petcare.gif" width="100%" height="60%">
+<p align="center">    <img src="media/readme_pictures/main_petcare.gif" width="100%" height="60%">
 </p>
 
 #
