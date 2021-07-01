@@ -17,7 +17,6 @@ Python-Django powered web platform meant to help organizing volunteer activities
 Get PetCare from Github.
 ```
 git clone https://github.com/MatSaf123/pet-care-app.git
-
 ```
 Create new virtual environment, activate it and instal requirements.
 
@@ -76,7 +75,8 @@ python manage.py createsuperuser
     - access to post map
     - map initialization on approximated user location (IP geolocation with GeoLite2)
     - browsing comments on user's profiles
-    
+    - filtering posts, tags, profiles
+
 
 - for logged-in user:
     - all of above
@@ -156,9 +156,9 @@ Map technology powered by <a href="https://leafletjs.com/">Leaflet</a> and <a hr
 
 #
 
-<div style="text-align:center">
-<img src="media/readme_pictures/kapoo.gif" width="30%" height="30%">
-</div>
+<p align="center">
+    <img src="media/readme_pictures/kapoo.gif" width="30%" height="30%">
+</p>
 
 Mateusz Safaryjski / MatSaf123 
 
