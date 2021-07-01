@@ -18,7 +18,13 @@
                 <div class="px-4 m-2">
                     <div class="mt-3">
 
-                        <p class="text">Email address: {{ profile_owner.email }}</p>
+                        {% if profile_owner.email is not None %}
+                        {% if user.is_authenticated %}
+                            <p class="text">E-mail address: {{ profile_owner.email }}</p>
+                            {% else %}
+                            <p class="text">E-mail address: <a href="{% url 'login' %}">Log in to see this info</a></p>
+                            {% endif %}
+                        {% endif %}
 
                         {% if profile_owner.profile.phone_number is not None %}
                             {% if user.is_authenticated %}
@@ -28,17 +34,20 @@
                             {% endif %}
                         {% endif %}
 
+
                         {% if profile_owner.profile.country is not None %}
-                        {% if user.is_authenticated %}
-                            <p class="text">Country: {{ profile_owner.profile.country }}</p>
-                            {% else %}
-                            <p class="text">Country: <a href="{% url 'login' %}">Log in to see this info</a></p>
-                            {% endif %}
+                        <p class="text">Country: {{ profile_owner.profile.country }}</p>
                         {% endif %}
 
+                        
                         {% if profile_owner.profile.city is not None %}
-                        <p class="text">City: {{ profile_owner.profile.city }}</p>
+                        {% if user.is_authenticated %}
+                            <p class="text">City: {{ profile_owner.profile.city }}</p>
+                            {% else %}
+                            <p class="text">City: <a href="{% url 'login' %}">Log in to see this info</a></p>
+                            {% endif %}
                         {% endif %}
+                        
 
                         {% if profile_owner.profile.description is not None %}
                         <p class="text">About me: {{ profile_owner.profile.description }}</p>
