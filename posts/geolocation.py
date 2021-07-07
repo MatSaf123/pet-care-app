@@ -60,7 +60,7 @@ def get_geo_data_from_api(geo_data: str) -> location.Location:
     """
 
     # print('Making a call to remote API for:', geo_data)
-    geolocator = Photon(user_agent='measurements', timeout=10)
+    geolocator = Photon(user_agent='geopy/2.1.0', timeout=10)
     location = geolocator.geocode(geo_data)
 
     return location
