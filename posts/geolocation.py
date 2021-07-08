@@ -1,11 +1,13 @@
 import django.db.models
 from django.contrib.gis.geoip2 import GeoIP2
+from folium.map import Icon
 from geopy import Photon
 from geopy import location
 import folium
 from ediblepickle import checkpoint
 from django.template.defaultfilters import slugify, time
 import os
+from django.urls import reverse
 
 def get_geo_from_ip(ip) -> tuple:
     """Get geometrical info from an IP address based on GeoLite2 databases.
@@ -90,15 +92,11 @@ def initiate_map(posts: django.db.models.QuerySet, location: tuple) -> str:
         else:
             color = 'red'
 
-        url = f'<a href="/post/{post.slug}/">{post.title}</a> (Open me in new window!)'
-        # Im doing hrefs-popups this way because there's a conflict between Bootstrap and Folium,
-        # which pretty much forces me to make the map embedded in the site.
-        # I acknowledge it's a pretty bad way to do it, though.
-
-        folium.Marker([location.latitude, location.longitude], popup=url,
-                      icon=folium.Icon(color=color)).add_to(m)
+        url = reverse('post-detail', args=[post.slug])
+        folium.Marker([location.latitude, location.longitude], popup=f'<a href="{url}">{post.title}</a>',
+                      icon=folium.Icon(icon="info-sign", color=color)).add_to(m)
 
 
-    m = m._repr_html_() # a string value, HTML code
+    m = m.get_root().render()
     return m
 
