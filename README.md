@@ -18,7 +18,7 @@ Get PetCare from Github.
 ```
 git clone https://github.com/MatSaf123/pet-care-app.git
 ```
-Create new virtual environment, activate it and instal requirements.
+Create new virtual environment, activate it and install required modules from `requirements.txt` file.
 
 ```
 python3 -m venv /path/to/new/virtual/environment
@@ -27,9 +27,27 @@ source /path/to/new/virtual/environment/bin/activate
 
 pip install -r requirements.txt
 ```
+
+Create your own PostgreSQL database and connect it to the PetCare, by filling `DATABASES` dictionary in `settings.py`:
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'your_petcare_db',
+        'USER': 'your_username',
+        'PASSWORD': 'your_password',
+        'HOST': 'your_host',
+        'PORT': 'your_port'
+    }
+}
+```
+
 Run migrations.
 
 ```
+python manage.py makemigrations
+
 python manage.py migrate
 ```
 
@@ -38,11 +56,6 @@ Get MaxMind GeoLite2 databases from https://dev.maxmind.com/geoip/geolite2-free-
 - GeoLite2-City.mmdb
 - GeoLite2-Country.mmdb
 
-Finally, run server.
-
-```
-python manage.py runserver
-```
 
 Optionally, Create superuser to access admin panel.
 
@@ -50,6 +63,11 @@ Optionally, Create superuser to access admin panel.
 python manage.py createsuperuser
 ```
 
+Finally, run server.
+
+```
+python manage.py runserver
+```
 #
 
 
