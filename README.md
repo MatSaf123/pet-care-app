@@ -79,7 +79,7 @@ python manage.py createsuperuser
 
 
 - for logged-in user:
-    - all of above
+    - all features above
     - access to contact data on user profiles
     - creating new posts
     - editing created posts
@@ -139,12 +139,11 @@ All tags available are listed here.
     <img src="media/readme_pictures/tags.gif" width="100%" height="100%">
 </p>
 
+#
 
+## Warning
 
-## Issues:
-
-- map is embedded in the site, meaning everytime user tries to open link in the popum, internet browser may warn him about potential danger.
-This is because of a conflict between Bootstrap and Folium libraries (https://github.com/python-visualization/folium/issues/192). May fix in future.
+Application may look a little different from what can be seen on GIFs/screens due to some minor changes, but it's core features and overall characteristics stay the same. 
 
 #
 
