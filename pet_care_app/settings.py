@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'pet_care_app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'your_petcare_db',
+        'USER': 'your_username',
+        'PASSWORD': 'your_password',
+        'HOST': 'your_host',
+        'PORT': 'your_port'
     }
 }
 

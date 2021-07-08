@@ -5,7 +5,7 @@
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/MatSaf123/pet-care-app?style=plastic"/>
 </p>
 
-Python-Django powered web platform meant to help organizing volunteer activities towards animals in need, allowing both people in need of help and people willing to help then to communicate and commit to bettering animal lives.
+Python and Django powered web platform meant to help organizing volunteer activities towards animals in need, allowing both people in need of help and people willing to help and committing to improve animal lives.
 
 <p align="center">    <img src="media/readme_pictures/main_petcare.gif" width="100%" height="60%">
 </p>
@@ -14,11 +14,11 @@ Python-Django powered web platform meant to help organizing volunteer activities
 
 ## Run
 
-Get PetCare from Github.
+Clone PetCare from Github.
 ```
 git clone https://github.com/MatSaf123/pet-care-app.git
 ```
-Create new virtual environment, activate it and instal requirements.
+Create new virtual environment, activate it and install required modules listed in `requirements.txt` file.
 
 ```
 python3 -m venv /path/to/new/virtual/environment
@@ -27,9 +27,27 @@ source /path/to/new/virtual/environment/bin/activate
 
 pip install -r requirements.txt
 ```
+
+Create your own PostgreSQL database and connect it to PetCare by filling `DATABASES` dictionary in `settings.py`:
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'your_petcare_db',
+        'USER': 'your_username',
+        'PASSWORD': 'your_password',
+        'HOST': 'your_host',
+        'PORT': 'your_port'
+    }
+}
+```
+
 Run migrations.
 
 ```
+python manage.py makemigrations
+
 python manage.py migrate
 ```
 
@@ -38,18 +56,18 @@ Get MaxMind GeoLite2 databases from https://dev.maxmind.com/geoip/geolite2-free-
 - GeoLite2-City.mmdb
 - GeoLite2-Country.mmdb
 
-Finally, run server.
 
-```
-python manage.py runserver
-```
-
-Optionally, Create superuser to access admin panel.
+Optionally, create superuser to access admin panel.
 
 ```
 python manage.py createsuperuser
 ```
 
+Finally, run server.
+
+```
+python manage.py runserver
+```
 #
 
 
@@ -79,7 +97,7 @@ python manage.py createsuperuser
 
 
 - for logged-in user:
-    - all of above
+    - all features above
     - access to contact data on user profiles
     - creating new posts
     - editing created posts
@@ -139,12 +157,11 @@ All tags available are listed here.
     <img src="media/readme_pictures/tags.gif" width="100%" height="100%">
 </p>
 
+#
 
+## Warning
 
-## Issues:
-
-- map is embedded in the site, meaning everytime user tries to open link in the popum, internet browser may warn him about potential danger.
-This is because of a conflict between Bootstrap and Folium libraries (https://github.com/python-visualization/folium/issues/192). May fix in future.
+Application may look a little different from what can be seen on GIFs/screens due to some minor changes, but it's core features and overall characteristics stay the same. 
 
 #
 

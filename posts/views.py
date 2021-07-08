@@ -77,7 +77,7 @@ def detail_view(request, slug) -> HttpResponse:
         icon=folium.Icon(color=color)
     ).add_to(m)
 
-    m = m._repr_html_()
+    m = m.get_root().render()
 
     context = {
         'post': post,
