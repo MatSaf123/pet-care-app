@@ -5,7 +5,7 @@
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/MatSaf123/pet-care-app?style=plastic"/>
 </p>
 
-Python-Django powered web platform meant to help organizing volunteer activities towards animals in need, allowing both people in need of help and people willing to help then to communicate and commit to bettering animal lives.
+Python and Django powered web platform meant to help organizing volunteer activities towards animals in need, allowing both people in need of help and people willing to help and committing to improve animal lives.
 
 <p align="center">    <img src="media/readme_pictures/main_petcare.gif" width="100%" height="60%">
 </p>
@@ -14,11 +14,11 @@ Python-Django powered web platform meant to help organizing volunteer activities
 
 ## Run
 
-Get PetCare from Github.
+Clone PetCare from Github.
 ```
 git clone https://github.com/MatSaf123/pet-care-app.git
 ```
-Create new virtual environment, activate it and install required modules from `requirements.txt` file.
+Create new virtual environment, activate it and install required modules listed in `requirements.txt` file.
 
 ```
 python3 -m venv /path/to/new/virtual/environment
@@ -28,7 +28,7 @@ source /path/to/new/virtual/environment/bin/activate
 pip install -r requirements.txt
 ```
 
-Create your own PostgreSQL database and connect it to the PetCare, by filling `DATABASES` dictionary in `settings.py`:
+Create your own PostgreSQL database and connect it to PetCare by filling `DATABASES` dictionary in `settings.py`:
 
 ```
 DATABASES = {
@@ -57,7 +57,7 @@ Get MaxMind GeoLite2 databases from https://dev.maxmind.com/geoip/geolite2-free-
 - GeoLite2-Country.mmdb
 
 
-Optionally, Create superuser to access admin panel.
+Optionally, create superuser to access admin panel.
 
 ```
 python manage.py createsuperuser
