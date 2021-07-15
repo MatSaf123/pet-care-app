@@ -86,11 +86,13 @@ def initiate_map(posts: django.db.models.QuerySet, init_location: tuple) -> tupl
         post = posts[0]
         init_location = get_geo_data_from_api(' '.join([post.street_address, post.city, post.country]))
         map_init_latitude, map_init_longitude = init_location.latitude, init_location.longitude
+        zoom = 16
     else:
         map_init_latitude, map_init_longitude = init_location[2], init_location[3]
+        zoom = 8
 
     m = folium.Map(width='100%', heigth='100%', location=(
-        map_init_latitude, map_init_longitude), zoom_start=8)
+        map_init_latitude, map_init_longitude), zoom_start=zoom)
 
     skipped_post_markers = 0
     for post in posts:
