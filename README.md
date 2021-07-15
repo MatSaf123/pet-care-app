@@ -7,7 +7,7 @@
 
 Python and Django powered web platform meant to help organizing volunteer activities towards animals in need, allowing both people in need of help and people willing to help and committing to improve animal lives.
 
-<p align="center">    <img src="media/readme_pictures/main_petcare.gif" width="100%" height="60%">
+<p align="center">    <img src="media/readme_pictures/petcare_demo.gif" width="100%" height="60%">
 </p>
 
 #
@@ -46,8 +46,6 @@ DATABASES = {
 Run migrations.
 
 ```
-python manage.py makemigrations
-
 python manage.py migrate
 ```
 
@@ -114,47 +112,20 @@ python manage.py runserver
 - password reset module
 - deleting account on user request
 
-## Screens:
+#
 
-### Home screen
-
-Posts list on the left, alongside post creation button, sorting form and a set of most popular tags. On the right: interactive map representing posts from the list (their locations) .
+## GIFs:
 
 <p align="center">
-    <img src="media/readme_pictures/1.png" width="80%" height="80%">
+    <img src="media/readme_pictures/posts_demo.gif" width="80%" height="80%">
 </p>
 
-### Post detail screen
-
-Contains all the details and informations about picked post; author's username redirects to his profile.
-
 <p align="center">
-    <img src="media/readme_pictures/2.png" width="80%" height="80%">
+    <img src="media/readme_pictures/profile_demo.gif" width="80%" height="80%">
 </p>
 
-### Post creation process
-
-The whole process of adding a new post by a registered, logged in user.
-
 <p align="center">
-    <img src="media/readme_pictures/post_creation.gif" width="100%" height="100%">
-</p>
-
-### Users section and user profile detail screen
-
-List of users on the left, sorting form on the right. Also, user unique profile with list of posts created by him and comments on him added by other users.
-
-<p align="center">
-    <img src="media/readme_pictures/user_and_profile.gif" width="100%" height="100%">
-</p>
-
-
-### Tags screen
-
-All tags available are listed here.
-
-<p align="center">
-    <img src="media/readme_pictures/tags.gif" width="100%" height="100%">
+    <img src="media/readme_pictures/tags_users_demo.gif" width="80%" height="80%">
 </p>
 
 #
