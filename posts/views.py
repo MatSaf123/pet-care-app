@@ -9,6 +9,7 @@ from .geolocation import get_client_ip, get_geo_from_ip, get_geo_data_from_api, 
 import folium
 import string
 import random
+from django.contrib import messages
 
 # Create your views here.
 
@@ -33,7 +34,10 @@ def home_view(request) -> HttpResponse:
 
     # Initiate the map
     ip = get_client_ip(request)
-    m = initiate_map(posts, get_geo_from_ip(ip))
+    m, skipped_posts_count = initiate_map(posts, get_geo_from_ip(ip))
+    
+    if skipped_posts_count > 0:
+        messages.warning(request, f'Couldn\'t load {skipped_posts_count} post marker(s) on the map.')
     
     context = {
         'posts': posts,
@@ -53,31 +57,11 @@ def detail_view(request, slug) -> HttpResponse:
     """
 
     post = get_object_or_404(Post, slug=slug)
-    location = get_geo_data_from_api(
-        ' '.join([post.street_address, post.city, post.country]))
 
+    m, skipped_posts_count = initiate_map([post], None)
 
-    # Initiate the map
-    if post.type_of_post == 'HO':
-        color = 'blue'
-    else:
-        color = 'red'
-
-    m = folium.Map(
-        width='100%',
-        height='100%',
-        location=(location.latitude, location.longitude),
-        zoom_start=16)
-
-    folium.Marker(
-        [
-            location.latitude,
-            location.longitude
-        ],
-        icon=folium.Icon(color=color)
-    ).add_to(m)
-
-    m = m.get_root().render()
+    if skipped_posts_count > 0:
+        messages.warning(request, f'Couldn\'t load post marker on the map.')
 
     context = {
         'post': post,
@@ -108,7 +92,10 @@ def tagged_view(request, slug) -> HttpResponse:
 
     # Initiate the map
     ip = get_client_ip(request)
-    m = initiate_map(posts, get_geo_from_ip(ip))
+    m, skipped_posts_count = initiate_map(posts, get_geo_from_ip(ip))
+
+    if skipped_posts_count > 0:
+        messages.warning(request, f'Couldn\'t load {skipped_posts_count} post marker(s) on the map.')
 
     context = {
         'tag': tag,

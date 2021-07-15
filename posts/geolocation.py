@@ -61,35 +61,46 @@ def get_geo_data_from_api(geo_data: str) -> location.Location:
     :param geo_data: location given by user (post creator)
     """
 
-    # print('Making a call to remote API for:', geo_data)
+    if not os.path.exists('geo_cache/'):
+        os.mkdir('geo_cache/')
+
     try:
         geolocator = Nominatim(user_agent='petcareapp', timeout=10)
-    except ConnectionError:
-        geolocator = Photon(user_agent='petcareapp', timeout=10)
+    except:
+        return None
 
     location = geolocator.geocode(geo_data)
 
     return location
 
 
-def initiate_map(posts: django.db.models.QuerySet, location: tuple) -> str:
+def initiate_map(posts: django.db.models.QuerySet, init_location: tuple) -> tuple:
     """Initiate and return map with Posts locations marked on it, rendered as a HTML map.
 
     :param posts: Posts saved in database meant to be displayed on a map
-    :param location: approximated location of user
+    :param init_location: map initialization point (starting point)
     """
 
-    latitude, longitude = location[2], location[3]
+    # in case of detail view
+    if init_location is None:
+        post = posts[0]
+        init_location = get_geo_data_from_api(' '.join([post.street_address, post.city, post.country]))
+        map_init_latitude, map_init_longitude = init_location.latitude, init_location.longitude
+    else:
+        map_init_latitude, map_init_longitude = init_location[2], init_location[3]
 
     m = folium.Map(width='100%', heigth='100%', location=(
-        latitude, longitude), zoom_start=8)
+        map_init_latitude, map_init_longitude), zoom_start=8)
 
-    if not os.path.exists('geo_cache/'):
-        os.mkdir('geo_cache/')
-
+    skipped_post_markers = 0
     for post in posts:
-        geo_data = ' '.join([post.street_address, post.city, post.country])
-        location = get_geo_data_from_api(geo_data)
+
+        location_string = ' '.join([post.street_address, post.city, post.country])
+        returned_location = get_geo_data_from_api(location_string)
+
+        if returned_location is None:
+            skipped_post_markers += 1
+            continue
 
         if post.type_of_post == 'HO':
             color = 'blue'
@@ -97,10 +108,10 @@ def initiate_map(posts: django.db.models.QuerySet, location: tuple) -> str:
             color = 'red'
 
         url = reverse('post-detail', args=[post.slug])
-        folium.Marker([location.latitude, location.longitude], popup=f'<a href="{url}">{post.title}</a>',
+        href_html = f'<a href="{url}">{post.title}</a>'
+        folium.Marker([returned_location.latitude, returned_location.longitude], popup=href_html,
                       icon=folium.Icon(icon="info-sign", color=color)).add_to(m)
 
-
     m = m.get_root().render()
-    return m
+    return (m, skipped_post_markers)
 
