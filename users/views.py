@@ -100,10 +100,10 @@ def all_users_view(request) -> HttpResponse:
     if request.method == 'POST':
         # filter by requested username
         username = request.POST.get("reqested_username")
-        users = User.objects.filter(username__startswith=username)
+        users = User.objects.filter(username__startswith=username).order_by('username')
     else:
-        users = User.objects.all()
-
+        users = User.objects.all().order_by('username')
+    
     return render(request, 'users/all_users.html', {'users': users})
 
 

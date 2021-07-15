@@ -210,8 +210,8 @@ def all_tags_view(request) -> HttpResponse:
     if request.method == 'POST':
         # filter by requested username
         requested_tag = request.POST.get("requested_tag")
-        tags = Post.tags.filter(name__startswith=requested_tag)
+        tags = Post.tags.filter(name__startswith=requested_tag).order_by('name')
     else:
-        tags = Post.tags.all()
+        tags = Post.tags.all().order_by('name')
 
     return render(request, '../templates/posts/all_tags.html', {'tags': tags})
