@@ -45,7 +45,7 @@ def home_view(request) -> HttpResponse:
         'map': m
     }
 
-    return render(request, '../templates/posts/home.html', context)
+    return render(request, 'posts/home.html', context)
 
 
 def detail_view(request, slug) -> HttpResponse:
@@ -68,7 +68,7 @@ def detail_view(request, slug) -> HttpResponse:
         'map': m
     }
 
-    return render(request, '../templates/posts/detail.html', context)
+    return render(request, 'posts/detail.html', context)
 
 
 def tagged_view(request, slug) -> HttpResponse:
@@ -103,7 +103,7 @@ def tagged_view(request, slug) -> HttpResponse:
         'map': m
     }
 
-    return render(request, '../templates/posts/home.html', context)
+    return render(request, 'posts/home.html', context)
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -198,7 +198,7 @@ def about_view(request) -> HttpResponse:
     :param request: user request
     """
 
-    return render(request, '../templates/posts/about.html', {'title': 'About'})
+    return render(request, 'posts/about.html', {'title': 'About'})
 
 
 def all_tags_view(request) -> HttpResponse:
@@ -214,4 +214,4 @@ def all_tags_view(request) -> HttpResponse:
     else:
         tags = Post.tags.all().order_by('name')
 
-    return render(request, '../templates/posts/all_tags.html', {'tags': tags})
+    return render(request, 'posts/all_tags.html', {'tags': tags})
