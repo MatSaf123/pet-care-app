@@ -1,14 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http.response import HttpResponse
-from django.shortcuts import redirect, render, get_object_or_404
-from django.template.defaultfilters import slugify
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import CreateView, DeleteView, UpdateView
 from .models import Post
 from taggit.models import Tag
-from .geolocation import get_client_ip, get_geo_from_ip, get_geo_data_from_api, initiate_map
-import folium
-import string
-import random
+from .geolocation import get_client_ip, get_geo_from_ip, initiate_map
 from django.contrib import messages
 
 # Create your views here.
@@ -118,10 +114,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
         form.instance.author = self.request.user
         new_post = form.save(commit=False)
-        # random string to add to the slug
-        letters = string.ascii_letters
-        random_string = ''.join(random.choice(letters) for i in range(16))
-        new_post.slug = slugify(''.join([new_post.title, random_string]))
         new_post.save()
         form.save_m2m()
 

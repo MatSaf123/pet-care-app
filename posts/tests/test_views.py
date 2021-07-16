@@ -5,42 +5,32 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from posts.models import Post
 from django.utils import timezone
+import random
 
 class TestViews(TestCase):
 
     def setUp(self):
         """Run before tests."""
 
-        self.client = Client()
-        self.home_url = reverse('home')
-        self.detail_url = reverse('post-detail', args=['test-post-1'])
-        self.tagged_url = reverse('tagged', args=['test_1'])
-        self.create_url = reverse('post-create')
-        self.update_url = reverse('post-update', args=['test-post-1'])
-
         self.user_1 = User.objects.create(
             username='test_user_1',
             email='test_user@example.com',
             password='testing123'
         )
-
         self.post_1 = Post.objects.create(
             title='test post 1',
             content='test_content',
             date_posted=timezone.now(),
             author=self.user_1,
-            slug='test-post-1',
             country='Poland',
             city='Katowice',
             type_of_post='HR',
         )
-
         self.post_2 = Post.objects.create(
             title='test post 2',
             content='test_content',
             date_posted=timezone.now(),
             author=self.user_1,
-            slug='test-post-2',
             country='Poland',
             city='Katowice',
             type_of_post='HO',
@@ -48,6 +38,14 @@ class TestViews(TestCase):
 
         self.post_1.tags.set('test_1')
         self.post_2.tags.set('test_2')
+
+        self.client = Client()
+        self.home_url = reverse('home')
+        self.detail_url = reverse('post-detail', args=[self.post_1.slug])
+        self.tagged_url = reverse('tagged', args=['test_1'])
+        self.create_url = reverse('post-create')
+        self.update_url = reverse('post-update', args=[self.post_1.slug])
+
 
     def test_home_view_GET(self):
 
