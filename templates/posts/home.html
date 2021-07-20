@@ -15,7 +15,7 @@
             {% endif %}
 
             <!-- Sort-by-type-of-post-form -->
-            <form method='POST' class="mt-1">
+            <form method='GET' class="mt-1">
                 {% csrf_token %}
                 Filter by:
                 <input type="radio" id="all_posts" name="type_of_post" value="" checked="True">

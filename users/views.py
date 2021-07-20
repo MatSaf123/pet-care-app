@@ -97,12 +97,12 @@ def all_users_view(request) -> HttpResponse:
     :param request: user request
     """
 
-    if request.method == 'POST':
-        # filter by requested username
-        username = request.POST.get("reqested_username")
-        users = User.objects.filter(username__startswith=username).order_by('username')
-    else:
+    # filter by requested username
+    requested_username = request.GET.get("reqested_username")
+    if requested_username is None:
         users = User.objects.all().order_by('username')
+    else:
+        users = User.objects.filter(username__startswith=requested_username).order_by('username')
     
     return render(request, 'users/all_users.html', {'users': users})
 

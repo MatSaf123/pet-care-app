@@ -16,14 +16,11 @@ def home_view(request) -> HttpResponse:
     :param request: user request
     """
 
-    if request.method == 'POST':
-        type_of_post = request.POST.get("type_of_post")
-        if not type_of_post:
-            posts = Post.objects.all()
-        else:
-            posts = Post.objects.filter(type_of_post=type_of_post)
-    else:
+    type_of_post = request.GET.get("type_of_post")
+    if not type_of_post:
         posts = Post.objects.all()
+    else:
+        posts = Post.objects.filter(type_of_post=type_of_post)
 
     # Show most common tags (top four)
     common_tags = Post.tags.most_common()[:4]
@@ -74,14 +71,11 @@ def tagged_view(request, slug) -> HttpResponse:
     :param slug: slug value of a post, needed to get post from the database
     """
 
-    if request.method == 'POST':
-        type_of_post = request.POST.get("type_of_post")
-        if not type_of_post:
-            posts = Post.objects.all()
-        else:
-            posts = Post.objects.filter(type_of_post=type_of_post)
-    else:
+    type_of_post = request.GET.get("type_of_post")
+    if not type_of_post:
         posts = Post.objects.all()
+    else:
+        posts = Post.objects.filter(type_of_post=type_of_post)
 
     tag = get_object_or_404(Tag, slug=slug)
     posts = posts.filter(tags=tag)
@@ -199,11 +193,11 @@ def all_tags_view(request) -> HttpResponse:
     :param request: user request
     """
 
-    if request.method == 'POST':
-        # filter by requested username
-        requested_tag = request.POST.get("requested_tag")
-        tags = Post.tags.filter(name__startswith=requested_tag).order_by('name')
-    else:
+    # filter by requested tag
+    requested_tag = request.GET.get("requested_tag")
+    if not requested_tag:
         tags = Post.tags.all().order_by('name')
+    else:
+        tags = Post.tags.filter(name__startswith=requested_tag).order_by('name')
 
     return render(request, 'posts/all_tags.html', {'tags': tags})

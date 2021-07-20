@@ -50,10 +50,10 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'posts/home.html')
     
-    def test_home_view_POST(self):
-        """POST sorting form and get sorted posts list returned."""
+    def test_home_view_GET_sorted(self):
+        """Get sorted posts list returned."""
 
-        response = self.client.post(self.home_url, {'type_of_post': 'HR'})
+        response = self.client.get(self.home_url, {'type_of_post': 'HR'})
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'posts/home.html')
 
@@ -82,9 +82,9 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, 'posts/home.html')
         self.assertTrue(response.context['posts'].count() == 1)
     
-    def test_tagged_POST(self):
+    def test_tagged_GET_sorted(self):
 
-        response = self.client.post(self.tagged_url, {'type_of_post': 'HO'})
+        response = self.client.get(self.tagged_url, {'type_of_post': 'HO'})
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'posts/home.html')
         self.assertTrue(response.context['posts'].count() == 0)
