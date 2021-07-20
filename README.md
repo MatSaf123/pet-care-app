@@ -7,7 +7,7 @@
 
 Python and Django powered web platform meant to help organizing volunteer activities towards animals in need, allowing both people in need of help and people willing to help and committing to improve animal lives.
 
-<p align="center">    <img src="media/readme_pictures/petcare_demo.gif" width="100%" height="60%">
+<p align="center">    <img src="static/readme_pictures/petcare_demo.gif" width="100%" height="60%">
 </p>
 
 #
@@ -117,15 +117,15 @@ python manage.py runserver
 ## GIFs:
 
 <p align="center">
-    <img src="media/readme_pictures/posts_demo.gif" width="80%" height="80%">
+    <img src="static/readme_pictures/posts_demo.gif" width="80%" height="80%">
 </p>
 
 <p align="center">
-    <img src="media/readme_pictures/profile_demo.gif" width="80%" height="80%">
+    <img src="static/readme_pictures/profile_demo.gif" width="80%" height="80%">
 </p>
 
 <p align="center">
-    <img src="media/readme_pictures/tags_users_demo.gif" width="80%" height="80%">
+    <img src="static/readme_pictures/tags_users_demo.gif" width="80%" height="80%">
 </p>
 
 #
@@ -145,7 +145,7 @@ Map technology powered by <a href="https://leafletjs.com/">Leaflet</a> and <a hr
 #
 
 <p align="center">
-    <img src="media/readme_pictures/kapoo.gif" width="30%" height="30%">
+    <img src="static/readme_pictures/kapoo.gif" width="30%" height="30%">
 </p>
 
 Mateusz Safaryjski / MatSaf123 
