@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os.path
+import json
+
+# READ SECRET DATA FROM LOCAL FILE
+
+f = open('secret.json')
+secret_data = json.load(f)
+f.close()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,14 +86,27 @@ WSGI_APPLICATION = 'pet_care_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'your_petcare_db',
+#         'USER': 'your_username',
+#         'PASSWORD': 'your_password',
+#         'HOST': 'your_host',
+#         'PORT': 'your_port'
+#     }
+# }
+
+# you can create secret.json and keep your database credentials there
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'petcare_db',
-        'USER': 'postgres',
-        'PASSWORD': '710199',
-        'HOST': 'localhost',
-        'PORT': '5432'
+        'NAME': secret_data['DB_NAME'],
+        'USER': secret_data['DB_USER'],
+        'PASSWORD': secret_data['DB_PASSWORD'],
+        'HOST': secret_data['DB_HOST'],
+        'PORT': secret_data['DB_PORT']
     }
 }
 
