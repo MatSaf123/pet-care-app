@@ -1,35 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container">
     <div class="row">
-
         <div class="col">
 
-            <p class="media-body p-2 my-1">All Tags:
+            <!-- Tags -->
+            <div class="all-tags-list">All Tags:
                 {% for tag in tags %}
                     <a href="{% url 'tagged' tag.slug %}" class="badge mr-1 badge badge-success">{{tag}}</a>
                 {% endfor %}
-            </p>
-
+            </div>
         </div>
-
         <div class="col">
-
-            <form method='POST'>
-                {% csrf_token %}    <!-- required security token -->
             
+            <!-- Tags-sorting-form -->
+            <form method='POST'>
+                {% csrf_token %}
                 <div id="div_requested_tag" class="control-group mb-1">
                     <div class="controls"> 
                         <input type='text' name="requested_tag" class="form-control" required id="requested_tag" placeholder="Search for posts with tag...">
                     </div>
                 </div>
-            
-                <input type="submit" class="btn btn-success">
+                <input type="submit" class="btn btn-success" value="Search">
             </form>
-
         </div>
-
     </div>
-</div>
 {% endblock content %}

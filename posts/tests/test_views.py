@@ -1,11 +1,8 @@
-from django.http import request
-from posts.views import PostCreateView
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
 from posts.models import Post
 from django.utils import timezone
-import random
 
 class TestViews(TestCase):
 

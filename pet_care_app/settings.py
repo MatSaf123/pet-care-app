@@ -82,11 +82,11 @@ WSGI_APPLICATION = 'pet_care_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'your_petcare_db',
-        'USER': 'your_username',
-        'PASSWORD': 'your_password',
-        'HOST': 'your_host',
-        'PORT': 'your_port'
+        'NAME': 'petcare_db',
+        'USER': 'postgres',
+        'PASSWORD': '710199',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
@@ -128,7 +128,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = ''
 
-STATICFILES_DIRS = (os.path.join('static'),)
+STATICFILES_DIRS = (os.path.join('static'),os.path.join('static/css'))
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

@@ -1,19 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
   <div class="row">
-    <div class="col-md">
 
+    <!-- Sorting-panel and posts list -->
+    <div class="col-md">
         <div class="media-body p-2 mt-1">
+            
+            <!-- Create post button -->
             {% if user.is_authenticated  %}
                 <a href="{% url 'post-create' %}" type="button" class="btn btn-success btn-lg btn-block">Create new post</a>
             {% else %}
                 <a href="{% url 'login' %}" type="button" class="btn btn-success btn-lg btn-block">Create new post</a>
             {% endif %}
 
+            <!-- Sort-by-type-of-post-form -->
             <form method='POST' class="mt-1">
-                {% csrf_token %}    <!-- required security token -->
+                {% csrf_token %}
                 Filter by:
                 <input type="radio" id="all_posts" name="type_of_post" value="" checked="True">
                 <label for="all_posts">All posts</label>
@@ -23,34 +26,35 @@
                 <label for="help_request">Help requests</label>
                 <input type="submit" value="Filter">
             </form>
-
         </div>
 
+        <!-- Most common tags section -->
         <p class="media-body p-2 my-1">Common Tags:
             {% for mt in common_tags %}
                 <a href="{% url 'tagged' mt.slug %}" class="badge badge-success">{{ mt }}</a>
             {% endfor %}
         </p>
-
-    <ul class="list-group">
+    
+        <!-- Posts list -->
+        <ul class="list-group">
             {% for post in posts %}
-                <div class="col">
-                    <div class="cards">
-                        <div class="row no-gutters border rounded  flex-md-row mb-4 shadow-sm h-md-250">
-                            <div class="col p-4 d-flex flex-column position-static">
-                                {% if post.type_of_post == 'HO' %}
-                                <b class="font-weight-light text-info">Help offer</b>
-                                {% else %}
-                                <b class="font-weight-light text-danger">Help request</b>
-                                {% endif %}
-                                <h3 class="my-1"><a href="{% url 'post-detail' post.slug %}">{{post.title}}</a></h3>
-                                <p>Posted by: <a href="{% url 'user-profile' post.author.username %}">{{post.author.username}}</a> at {{post.date_posted}}</p>
-                                <div style="display:flex">
-                                    {% for tag in post.tags.all %}
-                                    <a href="{% url 'tagged' tag.slug %}" class="mr-1 badge badge-info">#{{ tag }}</a>
-                                    {% endfor %}
-                                </div>
-                            </div>
+                <div class="row no-gutters border rounded flex-md-row mb-4 shadow-sm h-md-250">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <!-- Type of post -->
+                        {% if post.type_of_post == 'HO' %}
+                        <b class="font-weight-light text-info">Help offer</b>
+                        {% else %}
+                        <b class="font-weight-light text-danger">Help request</b>
+                        {% endif %}
+                        <!-- Title-href -->
+                        <h3 class="my-1"><a href="{% url 'post-detail' post.slug %}">{{post.title}}</a></h3>
+                        <!-- Author and time info -->
+                        <p>Posted by: <a href="{% url 'user-profile' post.author.username %}">{{post.author.username}}</a> at {{post.date_posted}}</p>
+                        <!-- Tags -->
+                        <div style="display:flex">
+                            {% for tag in post.tags.all %}
+                            <a href="{% url 'tagged' tag.slug %}" class="mr-1 badge badge-info">#{{ tag }}</a>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -58,10 +62,10 @@
         </ul>
     </div>
 
+    <!-- Map -->
     <div class="col-md" style="max-height: fit-content;">
         {{map|safe}}
     </div>
 
   </div>
-</div>
 {% endblock content %}
