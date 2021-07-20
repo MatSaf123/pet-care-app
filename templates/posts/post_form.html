@@ -7,13 +7,11 @@
         {% csrf_token %}
 
             <div class="form-group">
-
                 <label for="id_title">Title:</label>
                     <input type="text" name="title" class="form-control" required id="id_title" value="{{ title }}" placeholder="Insert some catchy title for your post.">
 
                 <label for="id_content">Content:</label>
                     <textarea name="content" class="form-control" required id="id_content" placeholder="Insert description of your post here.">{{ content }}</textarea>
-
 
                 <label for="id_country">Country:</label>
                     <textarea name="country" class="form-control" required id="id_country" placeholder="In what country does this happen?">{{ country }}</textarea>
@@ -24,11 +22,9 @@
                 <label for="id_street_address">Street address:</label>
                     <textarea name="street_address" class="form-control" placeholder="On what address does this happen? (not required)">{{ street_address }}</textarea>
 
-                <div id="div_id_type_of_post" class="control-group">
-                    <label for="id_type_of_post" class="control-label">Type of post:</label>
+                    <label for="id_type_of_post">Type of post:</label>
                     <div class="controls"> 
                         <select name="type_of_post" class="form-select" id="id_type_of_post"> 
-
                             {% if  help_request == HO %}
                                 <option value="HR">Help request</option> 
                                 <option value="HO" selected>Help offer</option>
@@ -37,8 +33,7 @@
                                 <option value="HO">Help offer</option>
                             {% endif %}
                         </select> 
-                    </div> 
-                </div>
+                    </div>
 
                 <label for="id_tags">Tags:</label>
                     <input type="text" data-role="tagsinput" class="form-control" name="tags" required id="id_tags" value="{{ tags }}" placeholder="Dogs, Cats, Food...">
@@ -46,9 +41,7 @@
                 <div class="media-body p-2 my-1">
                     <button class="btn btn-outline-info" id="lowerButton" type="submit" value="OK">Post</button>
                 </div>
-
             </div>
-
     </form>
 </div>
 {% endblock content %}

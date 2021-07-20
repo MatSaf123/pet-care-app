@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container">
 
     <div class="row">
 
+        <!-- Users list -->
         <div class="col">
             <ul class="list-group">
             {% for user in users %}
@@ -19,24 +19,22 @@
             </ul>
         </div>
 
+        <!-- Sort-by-username form -->
         <div class="col">
             <form method='POST'>
-                {% csrf_token %}    <!-- required security token -->
-
+                {% csrf_token %}
                 <div id="div_reqested_username" class="control-group mb-1">
                     <div class="controls"> 
                         <input type='text' name="reqested_username" class="form-control" required id="reqested_username" placeholder="Find by username...">
                     </div>
                 </div>
-
-                <input type="submit" class="btn btn-success">
+                <input type="submit" class="btn btn-success" value="Search">
             </form>
 
         </div>
     
     </div>
 
-</div>
 
 
 {% endblock content %}

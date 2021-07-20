@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_filters %}
 {% block content %}
-<div class="container">
     <div class="content-section border rounded round p-4">
         <div class="media">
             <div class="media-body">
@@ -60,7 +59,6 @@
 
         <h3 class="mt-5">Posts made by this user:</h3>
 
-        <div class="container">
             <ul class="list-group">
                 {% for post in posts %}
                 <div class="col">
@@ -92,11 +90,9 @@
                 </div>
                 {% endif %}
             </ul>
-        </div>
 
         <h3 class="mt-5">Comments on this user:</h3>
 
-        <div class="container">
             <ul class="list-group">
                 {% for comment in comments %}
                 <div class="col">
@@ -123,12 +119,10 @@
                 </div>
                 {% endif %}
             </ul>
-        </div>
 
         <div class="px-4 mt-5">
             <form method="post">
                 {% csrf_token %}
-                <!-- required security token -->
 
                 <div id="div_id_content" class="control-group">
                     <label for="id_content" class="control-label requiredField">Write a comment about this user:</label>
@@ -148,5 +142,4 @@
         </div>
 
     </div>
-</div>
 {% endblock content %}

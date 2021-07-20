@@ -1,14 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http.response import HttpResponse
-from django.shortcuts import redirect, render, get_object_or_404
-from django.template.defaultfilters import slugify
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import CreateView, DeleteView, UpdateView
 from .models import Post
 from taggit.models import Tag
-from .geolocation import get_client_ip, get_geo_from_ip, get_geo_data_from_api, initiate_map
-import folium
-import string
-import random
+from .geolocation import get_client_ip, get_geo_from_ip, initiate_map
+from django.contrib import messages
 
 # Create your views here.
 
@@ -33,7 +30,10 @@ def home_view(request) -> HttpResponse:
 
     # Initiate the map
     ip = get_client_ip(request)
-    m = initiate_map(posts, get_geo_from_ip(ip))
+    m, skipped_posts_count = initiate_map(posts, get_geo_from_ip(ip))
+    
+    if skipped_posts_count > 0:
+        messages.warning(request, f'Couldn\'t load {skipped_posts_count} post marker(s) on the map.')
     
     context = {
         'posts': posts,
@@ -41,7 +41,7 @@ def home_view(request) -> HttpResponse:
         'map': m
     }
 
-    return render(request, '../templates/posts/home.html', context)
+    return render(request, 'posts/home.html', context)
 
 
 def detail_view(request, slug) -> HttpResponse:
@@ -53,38 +53,18 @@ def detail_view(request, slug) -> HttpResponse:
     """
 
     post = get_object_or_404(Post, slug=slug)
-    location = get_geo_data_from_api(
-        ' '.join([post.street_address, post.city, post.country]))
 
+    m, skipped_posts_count = initiate_map([post], None)
 
-    # Initiate the map
-    if post.type_of_post == 'HO':
-        color = 'blue'
-    else:
-        color = 'red'
-
-    m = folium.Map(
-        width='100%',
-        height='100%',
-        location=(location.latitude, location.longitude),
-        zoom_start=16)
-
-    folium.Marker(
-        [
-            location.latitude,
-            location.longitude
-        ],
-        icon=folium.Icon(color=color)
-    ).add_to(m)
-
-    m = m.get_root().render()
+    if skipped_posts_count > 0:
+        messages.warning(request, f'Couldn\'t load post marker on the map.')
 
     context = {
         'post': post,
         'map': m
     }
 
-    return render(request, '../templates/posts/detail.html', context)
+    return render(request, 'posts/detail.html', context)
 
 
 def tagged_view(request, slug) -> HttpResponse:
@@ -108,7 +88,10 @@ def tagged_view(request, slug) -> HttpResponse:
 
     # Initiate the map
     ip = get_client_ip(request)
-    m = initiate_map(posts, get_geo_from_ip(ip))
+    m, skipped_posts_count = initiate_map(posts, get_geo_from_ip(ip))
+
+    if skipped_posts_count > 0:
+        messages.warning(request, f'Couldn\'t load {skipped_posts_count} post marker(s) on the map.')
 
     context = {
         'tag': tag,
@@ -116,7 +99,7 @@ def tagged_view(request, slug) -> HttpResponse:
         'map': m
     }
 
-    return render(request, '../templates/posts/home.html', context)
+    return render(request, 'posts/home.html', context)
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -131,10 +114,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
         form.instance.author = self.request.user
         new_post = form.save(commit=False)
-        # random string to add to the slug
-        letters = string.ascii_letters
-        random_string = ''.join(random.choice(letters) for i in range(16))
-        new_post.slug = slugify(''.join([new_post.title, random_string]))
         new_post.save()
         form.save_m2m()
 
@@ -211,7 +190,7 @@ def about_view(request) -> HttpResponse:
     :param request: user request
     """
 
-    return render(request, '../templates/posts/about.html', {'title': 'About'})
+    return render(request, 'posts/about.html', {'title': 'About'})
 
 
 def all_tags_view(request) -> HttpResponse:
@@ -223,8 +202,8 @@ def all_tags_view(request) -> HttpResponse:
     if request.method == 'POST':
         # filter by requested username
         requested_tag = request.POST.get("requested_tag")
-        tags = Post.tags.filter(name__startswith=requested_tag)
+        tags = Post.tags.filter(name__startswith=requested_tag).order_by('name')
     else:
-        tags = Post.tags.all()
+        tags = Post.tags.all().order_by('name')
 
-    return render(request, '../templates/posts/all_tags.html', {'tags': tags})
+    return render(request, 'posts/all_tags.html', {'tags': tags})

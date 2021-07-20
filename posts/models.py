@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
+from django.template.defaultfilters import slugify
 
 
 # Create your models here.
@@ -43,3 +44,7 @@ class Post(models.Model):
         """Redirect user to home page after a post is created."""
 
         return reverse('home')
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f'{self.title}, {str(self.pk)}')
+        super(Post, self).save(*args, **kwargs)
